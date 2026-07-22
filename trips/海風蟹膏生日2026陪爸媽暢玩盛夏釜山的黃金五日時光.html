@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海風蟹膏生日2026陪爸媽暢玩盛夏釜山的黃金五日時光</title>
+    <style>
+        :root {
+            --primary-color: #1f4e5b;
+            --secondary-color: #2e7d66;
+            --accent-color: #e76f51;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #2c3e50;
+            --text-muted: #6c757d;
+            --border-color: #e2ece9;
+            --highlight-bg: #fdfaf6;
+            --highlight-border: #f5ebd6;
+            --weather-bg: #eef7f6;
+            --todo-bg: #f8fafc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang TC", "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 12px;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        /* Header Banner */
+        .header-banner {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: #ffffff;
+            padding: 24px 16px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .header-banner h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .header-banner p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Section Cards */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 10px;
+            margin-bottom: 14px;
+            font-weight: bold;
+        }
+
+        /* To-Do List Grid */
+        .todo-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        @media (min-width: 600px) {
+            .todo-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .todo-category {
+            background-color: var(--todo-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .todo-category-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .todo-list {
+            list-style: none;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: var(--text-color);
+        }
+
+        .todo-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .todo-item input[type="checkbox"] {
+            margin-top: 3px;
+            accent-color: var(--secondary-color);
+            cursor: pointer;
+        }
+
+        /* Flight Table (RWD) */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 500px;
+        }
+
+        th {
+            background-color: #f2f7f5;
+            color: var(--primary-color);
+            font-weight: bold;
+            text-align: left;
+            padding: 10px;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+        }
+
+        /* Hotel & Feature Lists */
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .feature-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 2px;
+            display: block;
+        }
+
+        /* Highlights */
+        .highlights-box {
+            background-color: var(--highlight-bg);
+            border: 1px solid var(--highlight-border);
+            border-radius: 8px;
+            padding: 14px;
+        }
+
+        .highlight-item {
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .highlight-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Weather Badge Box */
+        .weather-card {
+            background-color: var(--weather-bg);
+            border-left: 4px solid var(--secondary-color);
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .weather-status {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .weather-temp {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        /* Itinerary Timeline */
+        .day-header {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 10px 14px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border-radius: 8px 8px 0 0;
+            margin-top: 10px;
+        }
+
+        .day-card {
+            background-color: var(--card-bg);
+            border-radius: 0 0 8px 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .time-slot {
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .time-slot:last-child {
+            margin-bottom: 0;
+        }
+
+        .time-header {
+            font-weight: bold;
+            color: var(--secondary-color);
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .badge-reservation {
+            background-color: #e76f51;
+            color: #ffffff;
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: normal;
+        }
+
+        .time-content {
+            padding-left: 10px;
+            border-left: 2px solid var(--border-color);
+            margin-left: 4px;
+            font-size: 0.93rem;
+        }
+
+        .notice-banner {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.88rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .spot-desc {
+            background-color: #f9f9f9;
+            border-left: 3px solid #cbd5e1;
+            padding: 8px 10px;
+            margin: 6px 0;
+            font-size: 0.88rem;
+            color: #475569;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .tip-box {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-top: 4px;
+        }
+
+        .day-summary {
+            background-color: #f4f7f6;
+            border: 1px dashed var(--secondary-color);
+            padding: 12px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            border-radius: 6px;
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 600px) {
+            body {
+                padding: 20px;
+            }
+            .header-banner h1 {
+                font-size: 1.8rem;
+            }
+            .header-banner p {
+                font-size: 1.05rem;
+            }
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header Banner -->
+    <div class="header-banner">
+        <h1>海風蟹膏生日2026陪爸媽暢玩盛夏釜山的黃金五日時光</h1>
+        <p>家族孝親慶生自由行手冊 (2026/07/24 - 07/28)</p>
+    </div>
+
+    <!-- To-Do List Checklist Section -->
+    <div class="card">
+        <div class="section-title">✅ 出發前行前準備與待辦事項</div>
+        <div class="todo-grid">
+            
+            <div class="todo-category">
+                <div class="todo-category-title">📄 證件與行程確認</div>
+                <ul class="todo-list">
+                    <li class="todo-item"><input type="checkbox"> 檢查全家人護照效期（需滿 6 個月以上）</li>
+                    <li class="todo-item"><input type="checkbox"> 確認兩路機票電子憑證（高雄 KHH / 福岡 FUK 雙線）</li>
+                    <li class="todo-item"><input type="checkbox"> 確認 Lounge 26 Hotel 訂房憑證與入住時間</li>
+                    <li class="todo-item"><input type="checkbox"> 填寫 K-ETA 或韓國電子入境申告書</li>
+                </ul>
+            </div>
+
+            <div class="todo-category">
+                <div class="todo-category-title">🍽️ 餐廳與票券確認</div>
+                <ul class="todo-list">
+                    <li class="todo-item"><input type="checkbox"><span style="color:#e76f51; font-weight:bold;">[Naver Map]</span> Sourin 韓牛烤肉訂位紀錄 (7/24)</li>
+                    <li class="todo-item"><input type="checkbox"><span style="color:#e76f51; font-weight:bold;">[Naver Map]</span> 石岩烤肉訂位紀錄 (7/25)</li>
+                    <li class="todo-item"><input type="checkbox"><span style="color:#e76f51; font-weight:bold;">[Naver Map]</span> 味贊王鹽烤肉海雲台店訂位紀錄 (7/26)</li>
+                    <li class="todo-item"><input type="checkbox"><span style="color:#e76f51; font-weight:bold;">[Naver Map]</span> 味酒工房訂位紀錄 (7/27)</li>
+                    <li class="todo-item"><input type="checkbox"><span style="color:#e76f51; font-weight:bold;">[Naver Map]</span> 老花園燒肉訂位紀錄 (7/28)</li>
+                    <li class="todo-item"><input type="checkbox"> ClubD Oasis 水上樂園/汗蒸幕入場券預訂</li>
+                </ul>
+            </div>
+
+            <div class="todo-category">
+                <div class="todo-category-title">💳 支付與通訊設備</div>
+                <ul class="todo-list">
+                    <li class="todo-item"><input type="checkbox"> 準備或儲值 WOWPASS / T-money 交通卡</li>
+                    <li class="todo-item"><input type="checkbox"> 開通海外信用卡刷卡功能與簡訊驗證</li>
+                    <li class="todo-item"><input type="checkbox"> 準備韓國網卡 (SIM/eSIM) 或漫遊設定</li>
+                    <li class="todo-item"><input type="checkbox"> 準備韓元現金（海鮮市場/夜市小吃使用）</li>
+                </ul>
+            </div>
+
+            <div class="todo-category">
+                <div class="todo-category-title">🎒 行李與個人裝備</div>
+                <ul class="todo-list">
+                    <li class="todo-item"><input type="checkbox"> 防曬裝備（太陽眼鏡、帽子、防曬乳、遮陽傘）</li>
+                    <li class="todo-item"><input type="checkbox"> 隨身攜帶雨具（防午後突發雷陣雨）</li>
+                    <li class="todo-item"><input type="checkbox"> ClubD Oasis 泳裝/泳帽（水上樂園區使用）</li>
+                    <li class="todo-item"><input type="checkbox"> 韓國轉接頭及行動電源</li>
+                    <li class="todo-item"><input type="checkbox"> 長輩常備藥品與個人隨身藥品</li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Flight Information -->
+    <div class="card">
+        <div class="section-title">✈️ 航班資訊摘要</div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 15%;">日期</th>
+                        <th style="width: 20%;">搭乘人員</th>
+                        <th style="width: 32%;">去程航班</th>
+                        <th style="width: 33%;">回程航班</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td rowspan="2" style="vertical-align: middle;"><strong>7/24 (五)<br>至<br>7/28 (二)</strong></td>
+                        <td><strong>騰億 ＆ 守群</strong></td>
+                        <td>釜山航空 BX141<br>福岡 (FUK) 12:15 ➡️ 釜山 (PUS) 13:00</td>
+                        <td>釜山航空 BX144<br>釜山 (PUS) 17:55 ➡️ 福岡 (FUK) 18:50</td>
+                    </tr>
+                    <tr>
+                        <td><strong>爸爸 ＆ 媽媽</strong></td>
+                        <td>濟州航空 7C6256<br>高雄 (KHH) 17:15 ➡️ 釜山 (PUS) 20:30</td>
+                        <td>釜山航空 BX795<br>釜山 (PUS) 11:25 ➡️ 高雄 (KHH) 13:05</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Hotel Information -->
+    <div class="card">
+        <div class="section-title">🏢 住宿基地介紹：Lounge 26 Hotel, Busan</div>
+        <p style="margin-bottom: 12px; font-size: 0.93rem; color: var(--text-muted);">
+            在出發前，先讓全家人了解這次入住的 Lounge 26 Hotel, Busan 厲害在哪裡，這絕對是孝親遊的超完美基地：
+        </p>
+        <ul class="feature-list">
+            <li>
+                <span class="feature-title">🌆 璀璨城市景觀與微醺空中酒廊</span>
+                飯店雖不主打正面海景，但其神級賣點位於 7 樓的空中酒廊！每日晚上 17:00 – 23:00，全家可以一起到頂樓酒廊，飽覽釜山南浦洞的繁華夜景。最棒的是，這裡免費提供生啤酒、紅白酒、爆米花與鹹甜餅乾無限暢飲與享用。第一晚全家在這裡邊看夜景、邊享受微醺時光，儀式感與性價比直接拉滿！
+            </li>
+            <li>
+                <span class="feature-title">🍢 下樓就是夜市與地鐵站</span>
+                飯店地理位置極度強大，下樓走幾步路就是地鐵「扎嘎其站」與機場巴士站。飯店正門過個馬路，就是最熱鬧的 BIFF 廣場小吃街、富平罐頭夜市與札嘎其水產市場。爸媽逛累了或吃飽了，一分鐘內就能迅速走回飯店躺平休息，完全不耗體力，宵夜選擇更是多到吃不完。
+            </li>
+            <li>
+                <span class="feature-title">🛎️ 溫馨時尚的接待空間</span>
+                飯店主打平價精緻的設計旅店風格，大廳空間雖然不像大型星級飯店般宏偉，但裝潢新穎現代、動線單純流暢。櫃檯提供 24 小時服務，人員精通英語、日語和韓語，且提供親切的行李寄存。飯店座落於熱鬧的巷弄旁，長輩在大門口上下計程車也非常醒目、迅速且方便。
+            </li>
+            <li>
+                <span class="feature-title">👕 科技感高機能設備與防疫客房</span>
+                全館於 2020 年底新建，屬於現代化設計型飯店，環境新穎乾淨、隔音佳。客房全面配置五星級床等級被褥與空氣清淨機。最讓人驚豔的是，部分特色房型更附設了電子衣櫥 (Styler) 幫您殺菌除臭（吃完烤肉和炸雞超需要！），甚至有大型泡澡浴缸，機能性完全不輸公寓式飯店。
+            </li>
+        </ul>
+    </div>
+
+    <!-- Core Highlights -->
+    <div class="card">
+        <div class="section-title">🎯 釜山孝親慶生行三大核心亮點</div>
+        <div class="highlights-box">
+            <div class="highlight-item">🍖 <strong>頂級海陸，免動手代烤：</strong>韓牛、熟成豬、松葉蟹全程專人代烤，肉質軟嫩好嚼，老爸慶生尊榮感滿分。</div>
+            <div class="highlight-item">❄️ <strong>全程冷氣，舒適不鐵腿：</strong>主攻全室內巨大百貨與海景汗蒸幕，動線輕鬆不曝曬，長輩旅遊完全不狼狽。</div>
+            <div class="highlight-item">🫂 <strong>雙線會合，全家溫馨團聚：</strong>福岡與高雄兩路班機流暢銜接，從驚喜海景消夜到廣安里夜景，打造最完美的家族回憶。</div>
+        </div>
+    </div>
+
+    <!-- Day 1 -->
+    <div class="day-header">📅 Day 1：7/24 (五) | 雙線出發，影島蔚藍海岸相聚</div>
+    <div class="day-card">
+        <div class="weather-card">
+            <div class="weather-info">
+                <span class="weather-status">☀️ 晴朗</span>
+                <span class="weather-temp">26°C - 32°C (78°F - 90°F)</span>
+                <span>💧 降雨機率：13%</span>
+            </div>
+            <div><span>☀️ 紫外線指數：10 (極高)</span></div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">13:00 ｜ 🛬 【騰億與守群抵達】</div>
+            <div class="time-content">
+                抵達釜山金海機場 (BX141)，搭計程車前往 Lounge 26 Hotel, Busan 飯店辦理 Check-in。
+                <div class="notice-banner" style="margin-top: 6px;">⚡ 行程亮點：釜山車站搶購皮卡丘</div>
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">14:30 ｜ ☕ 【海景午茶與散步】</div>
+            <div class="time-content">
+                搭乘計程車前往 Thrill on the mug 海景咖啡廳 ＋ 白淺灘文化村。
+                <div class="spot-desc"><strong>【白淺灘文化村】：</strong>依山傍海的絕美崖邊懸村，沿著充滿壁畫與彩色階梯的小巷漫步，彷彿置身韓國的聖托里尼。</div>
+                <div class="spot-desc"><strong>【Thrill on the mug】：</strong>村內最具代表性的巨型玻璃屋咖啡廳，擁有階梯式座位與大片落地窗，能將釜山港湛藍的海景第一排美景盡收眼底。 (周邊可品嚐 31冰淇淋)</div>
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">
+                18:30 ｜ 🥩 【精緻晚餐】 Sourin 韓牛烤肉
+                <span class="badge-reservation">Naver Map 已訂位</span>
+            </div>
+            <div class="time-content">
+                <strong>📍 餐廳介紹：</strong>環境高雅奢華的頂級熟成韓牛專賣店。主打由專業店員提供精準桌邊代烤，肉質鮮甜軟嫩、富含豐沛油脂，入口即化，極度適合長輩輕鬆咀嚼。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">20:30 ｜ 🛬 【爸爸媽媽抵達】</div>
+            <div class="time-content">
+                降落釜山金海機場 (7C6256)，搭計程車前往飯店。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">22:00 ｜ 🫂 【全家正式會合】</div>
+            <div class="time-content">
+                全家人在 Lounge 26 Hotel, Busan 飯店大廳會合、放置行李。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">22:15 ｜ 🍗 【深夜消夜】</div>
+            <div class="time-content">
+                飯店附近外帶 <strong>橋村炸雞</strong> 與 <strong>東大門獵奇辣年糕</strong> 回房間享用。
+                <div class="spot-desc"><strong>【橋村炸雞】：</strong>主打經典不敗的蜂蜜蒜味酥脆外皮。</div>
+                <div class="spot-desc"><strong>【東大門獵奇辣年糕】：</strong>全韓市佔第一、鋪滿厚實拉絲起司的大份量香辣年糕，外帶回房配著港灣夜景吃最過癮！</div>
+            </div>
+        </div>
+
+        <div class="day-summary">
+            💡 <strong>旅行小語：</strong> 第一天下午先享受兩人的寧靜海景，晚上在大廳迎接爸媽。當他們卸下行李，在房間裡一邊看著璀璨的釜山港大橋夜景、一邊吃著熱騰騰的炸雞，這份驚喜就是孝親之旅最完美的開場。
+        </div>
+    </div>
+
+    <!-- Day 2 -->
+    <div class="day-header">📅 Day 2：7/25 (六) | 傳統現撈海鮮與璀璨無人機秀</div>
+    <div class="day-card">
+        <div class="weather-card">
+            <div class="weather-info">
+                <span class="weather-status">🌩️ 局部雷雨</span>
+                <span class="weather-temp">26°C - 32°C (78°F - 89°F)</span>
+                <span>💧 降雨機率：33%</span>
+            </div>
+            <div><span>☀️ 紫外線指數：9 (極高)</span></div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">08:30 ｜ 🥣 【彈性早餐】</div>
+            <div class="time-content">
+                視胃口挑選南浦洞經典早餐。
+                <div class="tip-box">📍 餐廳選擇：Egg Drop（爆漿厚蛋吐司）、新昌吐司（傳統鐵板古早味）、本粥（溫潤高檔松露鮑魚粥）、密陽血腸豬肉湯飯（釜山靈魂大骨白湯）、南浦雪濃湯（清爽純白牛骨湯）。</div>
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">10:30 ｜ 🛍️ 【輕鬆避暑】</div>
+            <div class="time-content">
+                飯店對面 <strong>樂天百貨光復店</strong> ＋ <strong>樂天超市</strong>，或於 <strong>BIFF 廣場</strong> 隨意逛街吃小吃/國際市場紅豆剉冰。
+                <div class="spot-desc"><strong>【樂天超市】：</strong>採買海苔、零食伴手禮並可現場直接退稅的魔幻戰場 (樂天百貨五樓買 JellyCat)。</div>
+                <div class="spot-desc"><strong>【BIFF 廣場】：</strong>釜山電影節發源地，一字排開的傳統攤販以現炸「元祖黑糖堅果糖餅」最出名。</div>
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">11:45 ｜ 🦀 【豪華午餐】 札嘎其海鮮市場（爸媽指名必吃！）</div>
+            <div class="time-content">
+                <strong>📍 景點解說：</strong>韓國規模最大的指標性海鮮大樓。一樓室內大廳乾淨平坦、毫無傳統市場的腥臭與黏膩，兩旁整齊排列著現撈的活跳跳章魚、頂級肥美鮑魚、現切生魚片以及各式鮮甜貝類；挑選完後直接送往二樓由店家代客料理，不論是鮮甜的清蒸鮑魚，還是現煮的澎湃海鮮湯，都能一次滿足爸媽想大啖豐富海味的願望。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">14:00 ｜ 👟 【商圈血拼】</div>
+            <div class="time-content">
+                南浦洞光復路時裝街 & 富平罐頭市場 大採買。號稱釜山的明洞。這裡平坦好逛，各大運動品牌旗艦店林立血拼聖地。
+                <div class="tip-box">💡 點心提示：下午如果肚子餓，強烈推薦去吃南浦洞起司天花板「李在牟披薩」與富平罐頭市場內的排隊名店「Milgot (밀곳)」（主打黃豆粉紅豆奶油艾草糯米糕）。</div>
+                <div class="spot-desc">
+                    <strong>📍 釜山 Ready Young 藥局資訊（釜山首家）：</strong><br>
+                    地址：釜山廣域市中區BIFF廣場路40 B棟1、2樓 (부산광역시 중구 비프광장로 40)<br>
+                    營業時間：每日 10:00 - 23:00<br>
+                    特色服務：駐店專業藥師諮詢、中文/英文/日文翻譯、專業肌膚檢測儀、現場退稅 (Tax Free) 及 WOWPASS 付款。
+                </div>
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">
+                17:30 ｜ 🥩 【晚餐】 石岩烤肉
+                <span class="badge-reservation">Naver Map 已訂位</span>
+            </div>
+            <div class="time-content">
+                <strong>📍 餐廳介紹：</strong>南浦洞 4.8分神級熟成五花肉名店。主打特製的「傾斜黑石板」導流豬油，店員全程專業代烤，將肉質烤至表面金黃酥脆，搭配獨家『蘋果發酵泡菜』酸甜解膩，層次感十足。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">19:00 ｜ 🚕 【移動】</div>
+            <div class="time-content">
+                搭計程車前往廣安里海水浴場。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">20:00 (或 22:00) ｜ ✨ 【視覺饗宴】 廣安里 寶可夢悠閒海邊假期 無人機燈光秀（週六限定）</div>
+            <div class="time-content">
+                <strong>📍 景點解說：</strong>炎熱的夏夜，將絢麗點綴廣安里海灘的奇幻天空舞台，以寶可夢主題填滿的「廣安里 M 無人機燈光秀」即將舉行！夜晚天空如魔法般出現的可愛寶可夢們，能近距離直觀的絕佳機會！
+            </div>
+        </div>
+
+        <div class="day-summary">
+            💡 <strong>旅行小語：</strong>中午大啖現撈海鮮，晚上享受專人代烤豬五花。當無人機在廣安里夜空中亮起時，記得拿出相機捕捉爸媽眼中閃爍的驚喜，光線自然直出，就是最無價的家族合影。
+        </div>
+    </div>
+
+    <!-- Day 3 -->
+    <div class="day-header">📅 Day 3：7/26 (日) | 煙燻部隊鍋與海雲台高空奢華水療</div>
+    <div class="day-card">
+        <div class="weather-card">
+            <div class="weather-info">
+                <span class="weather-status">🌧️ 午後雷雨</span>
+                <span class="weather-temp">25°C - 31°C (77°F - 88°F)</span>
+                <span>💧 降雨機率：50%</span>
+            </div>
+            <div><span>☀️ 紫外線指數：9 (極高)</span></div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">08:30 ｜ 🥣 【彈性早餐】</div>
+            <div class="time-content">
+                南浦洞經典早餐群（同 Day 2，換吃不同家）。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">10:30 ｜ 🏬 【世界之最】 新世界百貨 Centum City 店</div>
+            <div class="time-content">
+                <strong>📍 景點解說：</strong>金氏世界紀錄認證的「全球最大百貨公司」。全室內冷氣、無障礙空間極度完善，聚集了世界頂級精品與潮流文創品牌，是夏日長輩最舒適的避暑逛街聖地。(百貨6樓買JellyCat)
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">11:30 ｜ 🥘 【午餐與甜點】 JVL 部隊鍋 ＆ Gelati Gelati 義式冰淇淋</div>
+            <div class="time-content">
+                <strong>📍 餐廳介紹：</strong>【JVL 部隊鍋】位於購物中心 4 樓，採用美國知名 Johnsonville 煙燻香腸與熱狗，湯頭濃郁香醇且有舒適獨立座位；吃飽後直奔【Gelati Gelati】，必點他們家濃郁濃醇、帶有微Ｑ米粒嚼勁的招牌「大米 (Riso) 口味」義式 Gelato。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">14:00 ｜ 🥐 【移動與點心】</div>
+            <div class="time-content">
+                搭乘計程車前往海雲台，購買知名鹽麵包當作小點心。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">14:30 ｜ 💦 【極致放鬆】 ClubD Oasis 水上樂園 ＆ 汗蒸幕</div>
+            <div class="time-content">
+                <strong>📍 景點解說：</strong>坐落於海雲台 LCT 摩天大樓內的頂級水療中心。包含高空無邊際海景泳池、人造浪（水上樂園需換泳衣），以及擁有五大主題的高級汗蒸幕與露天足浴區，長輩可以在這裡一邊欣賞海景一邊舒服地躺平睡午覺。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">
+                18:00 ｜ 🥩 【晚餐】 味贊王鹽烤肉 海雲台店（步行約 1 公里）
+                <span class="badge-reservation">Naver Map 已訂位</span>
+            </div>
+            <div class="time-content">
+                <strong>📍 餐廳介紹：</strong>釜山無人不知的超人氣排隊烤肉天花板。主打超厚切 3.5 公分熟成豬五花，店員用測溫槍精準掌控火候，烤得外酥內多汁，搭配特製蝦醬與醃菜，香氣四溢。
+            </div>
+        </div>
+
+        <div class="day-summary">
+            💡 <strong>旅行小語：</strong> 上午享受頂級百貨的奢華冷氣，下午轉換節奏到海雲台。爸媽累了隨時能在高空汗蒸幕躺平小憩，看著窗外海天一色的景致，洗去所有疲憊，晚上再用鹽烤肉補滿體力！
+        </div>
+    </div>
+
+    <!-- Day 4 -->
+    <div class="day-header">📅 Day 4：7/27 (一) | 🎂 爸爸生日快樂！豪邁蟹肉與澎湃烤腸海鮮餐酒館</div>
+    <div class="day-card">
+        <div class="weather-card">
+            <div class="weather-info">
+                <span class="weather-status">🌦️ 零星雷雨</span>
+                <span class="weather-temp">26°C - 31°C (78°F - 88°F)</span>
+                <span>💧 降雨機率：40%</span>
+            </div>
+            <div><span>☀️ 紫外線指數：9 (極高)</span></div>
+        </div>
+
+        <div class="notice-banner">⚠️ 提醒：樂天超市南浦洞店本日公休</div>
+
+        <div class="time-slot">
+            <div class="time-header">08:30 ｜ 🥣 【彈性早餐】</div>
+            <div class="time-content">
+                南浦洞經典早餐群。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">10:30 ｜ 🦀 【霸氣生日午餐】 機張市場松葉蟹</div>
+            <div class="time-content">
+                <strong>📍 景點解說：</strong>釜山近郊歷史悠久的傳統水產市場，以價格實惠、產地現撈現蒸的巨大活體松葉蟹遠近馳名。大啖飽滿肥美的鮮甜蟹肉後，最後必吃用濃郁蟹膏炒製的精華蟹膏炒飯，大氣又滿足！
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">12:00 ｜ 🛍️ 【血拼戰場】 樂天 Premium Outlets 東釜山店</div>
+            <div class="time-content">
+                <strong>📍 景點解說：</strong>以希臘聖托里尼度假風情打造的巨型 Outlet 城，佔地極廣、風景優美，是採買國際折扣精品、戶外機能服飾與運動服裝的絕佳掃貨去處。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">18:30 ｜ 🚕 【中場休息】</div>
+            <div class="time-content">
+                先搭計程車將戰利品拿回飯店放置，洗把臉休息一下、保留長輩體力。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">
+                19:00 ｜ 🍻 【慶生晚餐】 味酒工房 (미술공방)
+                <span class="badge-reservation">Naver Map 已訂位</span>
+            </div>
+            <div class="time-content">
+                <strong>📍 餐廳介紹：</strong>南浦洞人氣極高的海鮮熱炒餐酒館。主打「起司烤鮮扇貝、肥美大蝦、特製調味烤腸」三合一火烤拼盤，店員全程桌邊代烤，滋滋作響的石板配上拉絲起司，視覺效果極度浮誇震撼。
+            </div>
+        </div>
+
+        <div class="day-summary">
+            💡 <strong>旅行小語：</strong> 今天是整趟旅程的重頭戲——爸爸的生日！白天用霸氣的現撈松葉蟹拉開序幕，晚上在熱鬧的餐酒館看著起司扇貝與烤腸在石板上跳舞。全家人一起舉杯微醺，這絕對是視覺與味覺雙重高潮、永生難忘的生日夜。
+        </div>
+    </div>
+
+    <!-- Day 5 -->
+    <div class="day-header">📅 Day 5：7/28 (二) | 溫潤湯飯暖胃與溫馨送機</div>
+    <div class="day-card">
+        <div class="weather-card">
+            <div class="weather-info">
+                <span class="weather-status">🌦️ 零星雷雨</span>
+                <span class="weather-temp">26°C - 32°C (78°F - 89°F)</span>
+                <span>💧 降雨機率：40%</span>
+            </div>
+            <div><span>☀️ 紫外線指數：10 (極高)</span></div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">07:30 ｜ 🧳 【退房】</div>
+            <div class="time-content">
+                Lounge 26 Hotel, Busan 飯店辦理退房、寄放行李。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">07:45 ｜ 🥣 【溫暖早餐】</div>
+            <div class="time-content">
+                享用熱騰騰的本粥、雪濃湯或湯飯，為長輩暖胃。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">09:00 ｜ 🚕 【溫馨送機】</div>
+            <div class="time-content">
+                幫爸媽拿好行李、確認護照，叫好計程車，送爸媽出發去金海機場。(爸媽 11:25 飛機回高雄, BX795)
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">09:30 ｜ 🛍️ 【兩人時光】</div>
+            <div class="time-content">
+                前往 <strong>西面商圈</strong>。
+                <div class="spot-desc"><strong>📍 景點解說：</strong>釜山最繁華的年輕重鎮與潮流發源地。擁有龐大的地下街與無數極具設計感的潮流服飾、新銳設計師品牌、文創選物店（如田浦咖啡街周邊），是回國前最後衝刺掃貨的聖地。</div>
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">
+                12:00 ｜ 🥩 【雙人午餐】 老花園燒肉 (Old Mansion)
+                <span class="badge-reservation">Naver Map 已訂位</span>
+            </div>
+            <div class="time-content">
+                <strong>📍 餐廳介紹：</strong>隱身在西面田浦巷弄內的韓屋老宅風復古烤肉店。環境極具摩登工業風與文青感，主打精緻的高級熟成豬肉，搭配多樣精緻特調沾醬，風味細緻。
+            </div>
+        </div>
+
+        <div class="time-slot">
+            <div class="time-header">15:00 ｜ ✈️ 【滿載歸途】</div>
+            <div class="time-content">
+                回 Lounge 26 Hotel, Busan 飯店拿行李，搭計程車前往機場。(17:55 飛機回福岡, BX144)
+            </div>
+        </div>
+
+        <div class="day-summary">
+            💡 <strong>旅行小語：</strong> 早上用一碗熱呼呼的牛骨湯，為爸媽的釜山孝親行畫下最溫潤完美的句點。目送爸媽帶著滿滿的戰利品與笑顏開心回台後，你們也能好好享受最後悠閒的西面兩人時光，心滿意足地飛回熟悉的福岡。
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
