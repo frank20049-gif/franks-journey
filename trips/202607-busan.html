@@ -18,6 +18,8 @@
             --highlight-border: #f5ebd6;
             --weather-bg: #eef7f6;
             --todo-bg: #f8fafc;
+            --info-bg: #f0f9ff;
+            --info-border: #bae6fd;
         }
 
         * {
@@ -133,6 +135,26 @@
             cursor: pointer;
         }
 
+        /* New Section Boxes */
+        .info-box {
+            background-color: var(--info-bg);
+            border: 1px solid var(--info-border);
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+        }
+
+        .info-box:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-box-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+            margin-bottom: 6px;
+        }
+
         /* Flight Table (RWD) */
         .table-responsive {
             width: 100%;
@@ -200,6 +222,57 @@
             margin-bottom: 0;
         }
 
+        /* Collapsible Day Details */
+        details.day-wrapper {
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        summary.day-header {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 12px 16px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: background-color 0.2s ease;
+        }
+
+        summary.day-header::-webkit-details-marker {
+            display: none;
+        }
+
+        summary.day-header:hover {
+            background-color: #173f49;
+        }
+
+        summary.day-header::after {
+            content: "▼";
+            font-size: 0.85rem;
+            transition: transform 0.3s ease;
+            margin-left: 8px;
+            opacity: 0.8;
+        }
+
+        details.day-wrapper[open] summary.day-header::after {
+            transform: rotate(180deg);
+        }
+
+        .day-card {
+            background-color: var(--card-bg);
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+        }
+
         /* Weather Badge Box */
         .weather-card {
             background-color: var(--weather-bg);
@@ -232,27 +305,7 @@
             color: var(--accent-color);
         }
 
-        /* Itinerary Timeline */
-        .day-header {
-            background-color: var(--primary-color);
-            color: #ffffff;
-            padding: 10px 14px;
-            font-size: 1.05rem;
-            font-weight: bold;
-            border-radius: 8px 8px 0 0;
-            margin-top: 10px;
-        }
-
-        .day-card {
-            background-color: var(--card-bg);
-            border-radius: 0 0 8px 8px;
-            padding: 16px;
-            margin-bottom: 20px;
-            border: 1px solid var(--border-color);
-            border-top: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-        }
-
+        /* Timeline Items */
         .time-slot {
             margin-bottom: 16px;
             position: relative;
@@ -324,6 +377,12 @@
             margin-top: 16px;
             font-size: 0.9rem;
             border-radius: 6px;
+        }
+
+        /* Link Style */
+        a {
+            color: var(--secondary-color);
+            text-decoration: underline;
         }
 
         /* Responsive Adjustments */
@@ -470,332 +529,431 @@
         </div>
     </div>
 
-    <!-- Day 1 -->
-    <div class="day-header">📅 Day 1：7/24 (五) | 雙線出發，影島蔚藍海岸相聚</div>
-    <div class="day-card">
-        <div class="weather-card">
-            <div class="weather-info">
-                <span class="weather-status">☀️ 晴朗</span>
-                <span class="weather-temp">26°C - 32°C (78°F - 90°F)</span>
-                <span>💧 降雨機率：13%</span>
+    <!-- Day 1 (Collapsible) -->
+    <details class="day-wrapper" open>
+        <summary class="day-header">
+            <span>📅 Day 1：7/24 (五) | 雙線出發，影島蔚藍海岸相聚</span>
+        </summary>
+        <div class="day-card">
+            <div class="weather-card">
+                <div class="weather-info">
+                    <span class="weather-status">☀️ 晴朗</span>
+                    <span class="weather-temp">26°C - 32°C (78°F - 90°F)</span>
+                    <span>💧 降雨機率：13%</span>
+                </div>
+                <div><span>☀️ 紫外線指數：10 (極高)</span></div>
             </div>
-            <div><span>☀️ 紫外線指數：10 (極高)</span></div>
-        </div>
 
-        <div class="time-slot">
-            <div class="time-header">13:00 ｜ 🛬 【騰億與守群抵達】</div>
-            <div class="time-content">
-                抵達釜山金海機場 (BX141)，搭計程車前往 Lounge 26 Hotel, Busan 飯店辦理 Check-in。
-                <div class="notice-banner" style="margin-top: 6px;">⚡ 行程亮點：釜山車站搶購皮卡丘</div>
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">14:30 ｜ ☕ 【海景午茶與散步】</div>
-            <div class="time-content">
-                搭乘計程車前往 Thrill on the mug 海景咖啡廳 ＋ 白淺灘文化村。
-                <div class="spot-desc"><strong>【白淺灘文化村】：</strong>依山傍海的絕美崖邊懸村，沿著充滿壁畫與彩色階梯的小巷漫步，彷彿置身韓國的聖托里尼。</div>
-                <div class="spot-desc"><strong>【Thrill on the mug】：</strong>村內最具代表性的巨型玻璃屋咖啡廳，擁有階梯式座位與大片落地窗，能將釜山港湛藍的海景第一排美景盡收眼底。 (周邊可品嚐 31冰淇淋)</div>
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">
-                18:30 ｜ 🥩 【精緻晚餐】 Sourin 韓牛烤肉
-                <span class="badge-reservation">Naver Map 已訂位</span>
-            </div>
-            <div class="time-content">
-                <strong>📍 餐廳介紹：</strong>環境高雅奢華的頂級熟成韓牛專賣店。主打由專業店員提供精準桌邊代烤，肉質鮮甜軟嫩、富含豐沛油脂，入口即化，極度適合長輩輕鬆咀嚼。
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">20:30 ｜ 🛬 【爸爸媽媽抵達】</div>
-            <div class="time-content">
-                降落釜山金海機場 (7C6256)，搭計程車前往飯店。
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">22:00 ｜ 🫂 【全家正式會合】</div>
-            <div class="time-content">
-                全家人在 Lounge 26 Hotel, Busan 飯店大廳會合、放置行李。
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">22:15 ｜ 🍗 【深夜消夜】</div>
-            <div class="time-content">
-                飯店附近外帶 <strong>橋村炸雞</strong> 與 <strong>東大門獵奇辣年糕</strong> 回房間享用。
-                <div class="spot-desc"><strong>【橋村炸雞】：</strong>主打經典不敗的蜂蜜蒜味酥脆外皮。</div>
-                <div class="spot-desc"><strong>【東大門獵奇辣年糕】：</strong>全韓市佔第一、鋪滿厚實拉絲起司的大份量香辣年糕，外帶回房配著港灣夜景吃最過癮！</div>
-            </div>
-        </div>
-
-        <div class="day-summary">
-            💡 <strong>旅行小語：</strong> 第一天下午先享受兩人的寧靜海景，晚上在大廳迎接爸媽。當他們卸下行李，在房間裡一邊看著璀璨的釜山港大橋夜景、一邊吃著熱騰騰的炸雞，這份驚喜就是孝親之旅最完美的開場。
-        </div>
-    </div>
-
-    <!-- Day 2 -->
-    <div class="day-header">📅 Day 2：7/25 (六) | 傳統現撈海鮮與璀璨無人機秀</div>
-    <div class="day-card">
-        <div class="weather-card">
-            <div class="weather-info">
-                <span class="weather-status">🌩️ 局部雷雨</span>
-                <span class="weather-temp">26°C - 32°C (78°F - 89°F)</span>
-                <span>💧 降雨機率：33%</span>
-            </div>
-            <div><span>☀️ 紫外線指數：9 (極高)</span></div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">08:30 ｜ 🥣 【彈性早餐】</div>
-            <div class="time-content">
-                視胃口挑選南浦洞經典早餐。
-                <div class="tip-box">📍 餐廳選擇：Egg Drop（爆漿厚蛋吐司）、新昌吐司（傳統鐵板古早味）、本粥（溫潤高檔松露鮑魚粥）、密陽血腸豬肉湯飯（釜山靈魂大骨白湯）、南浦雪濃湯（清爽純白牛骨湯）。</div>
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">10:30 ｜ 🛍️ 【輕鬆避暑】</div>
-            <div class="time-content">
-                飯店對面 <strong>樂天百貨光復店</strong> ＋ <strong>樂天超市</strong>，或於 <strong>BIFF 廣場</strong> 隨意逛街吃小吃/國際市場紅豆剉冰。
-                <div class="spot-desc"><strong>【樂天超市】：</strong>採買海苔、零食伴手禮並可現場直接退稅的魔幻戰場 (樂天百貨五樓買 JellyCat)。</div>
-                <div class="spot-desc"><strong>【BIFF 廣場】：</strong>釜山電影節發源地，一字排開的傳統攤販以現炸「元祖黑糖堅果糖餅」最出名。</div>
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">11:45 ｜ 🦀 【豪華午餐】 札嘎其海鮮市場（爸媽指名必吃！）</div>
-            <div class="time-content">
-                <strong>📍 景點解說：</strong>韓國規模最大的指標性海鮮大樓。一樓室內大廳乾淨平坦、毫無傳統市場的腥臭與黏膩，兩旁整齊排列著現撈的活跳跳章魚、頂級肥美鮑魚、現切生魚片以及各式鮮甜貝類；挑選完後直接送往二樓由店家代客料理，不論是鮮甜的清蒸鮑魚，還是現煮的澎湃海鮮湯，都能一次滿足爸媽想大啖豐富海味的願望。
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">14:00 ｜ 👟 【商圈血拼】</div>
-            <div class="time-content">
-                南浦洞光復路時裝街 & 富平罐頭市場 大採買。號稱釜山的明洞。這裡平坦好逛，各大運動品牌旗艦店林立血拼聖地。
-                <div class="tip-box">💡 點心提示：下午如果肚子餓，強烈推薦去吃南浦洞起司天花板「李在牟披薩」與富平罐頭市場內的排隊名店「Milgot (밀곳)」（主打黃豆粉紅豆奶油艾草糯米糕）。</div>
-                <div class="spot-desc">
-                    <strong>📍 釜山 Ready Young 藥局資訊（釜山首家）：</strong><br>
-                    地址：釜山廣域市中區BIFF廣場路40 B棟1、2樓 (부산광역시 중구 비프광장로 40)<br>
-                    營業時間：每日 10:00 - 23:00<br>
-                    特色服務：駐店專業藥師諮詢、中文/英文/日文翻譯、專業肌膚檢測儀、現場退稅 (Tax Free) 及 WOWPASS 付款。
+            <div class="time-slot">
+                <div class="time-header">13:00 ｜ 🛬 【騰億與守群抵達】</div>
+                <div class="time-content">
+                    抵達釜山金海機場 (BX141)，搭計程車前往 Lounge 26 Hotel, Busan 飯店辦理 Check-in。
+                    <div class="notice-banner" style="margin-top: 6px;">⚡ 行程亮點：釜山車站 1 樓 31 冰淇淋搶購皮卡丘</div>
                 </div>
             </div>
-        </div>
 
-        <div class="time-slot">
-            <div class="time-header">
-                17:30 ｜ 🥩 【晚餐】 石岩烤肉
-                <span class="badge-reservation">Naver Map 已訂位</span>
+            <div class="time-slot">
+                <div class="time-header">14:30 ｜ ☕ 【海景午茶與散步】</div>
+                <div class="time-content">
+                    搭乘計程車前往 Thrill on the mug 海景咖啡廳 ＋ 白淺灘文化村。
+                    <div class="spot-desc"><strong>【白淺灘文化村】：</strong>依山傍海的絕美崖邊懸村，沿著充滿壁畫與彩色階梯的小巷漫步，彷彿置身韓國的聖托里尼。</div>
+                    <div class="spot-desc"><strong>【Thrill on the mug】：</strong>村內最具代表性的巨型玻璃屋咖啡廳，擁有階梯式座位與大片落地窗，能將釜山港湛藍的海景第一排美景盡收眼底。 (周邊可品嚐 31冰淇淋)</div>
+                </div>
             </div>
-            <div class="time-content">
-                <strong>📍 餐廳介紹：</strong>南浦洞 4.8分神級熟成五花肉名店。主打特製的「傾斜黑石板」導流豬油，店員全程專業代烤，將肉質烤至表面金黃酥脆，搭配獨家『蘋果發酵泡菜』酸甜解膩，層次感十足。
+
+            <div class="time-slot">
+                <div class="time-header">
+                    18:30 ｜ 🥩 【精緻晚餐】 Sourin 韓牛烤肉
+                    <span class="badge-reservation">Naver Map 已訂位</span>
+                </div>
+                <div class="time-content">
+                    <strong>📍 餐廳介紹：</strong>環境高雅奢華的頂級熟成韓牛專賣店。主打由專業店員提供精準桌邊代烤，肉質鮮甜軟嫩、富含豐沛油脂，入口即化，極度適合長輩輕鬆咀嚼。
+                </div>
             </div>
-        </div>
 
-        <div class="time-slot">
-            <div class="time-header">19:00 ｜ 🚕 【移動】</div>
-            <div class="time-content">
-                搭計程車前往廣安里海水浴場。
+            <div class="time-slot">
+                <div class="time-header">20:30 ｜ 🛬 【爸爸媽媽抵達】</div>
+                <div class="time-content">
+                    降落釜山金海機場 (7C6256)，搭計程車前往飯店。
+                </div>
             </div>
-        </div>
 
-        <div class="time-slot">
-            <div class="time-header">20:00 (或 22:00) ｜ ✨ 【視覺饗宴】 廣安里 寶可夢悠閒海邊假期 無人機燈光秀（週六限定）</div>
-            <div class="time-content">
-                <strong>📍 景點解說：</strong>炎熱的夏夜，將絢麗點綴廣安里海灘的奇幻天空舞台，以寶可夢主題填滿的「廣安里 M 無人機燈光秀」即將舉行！夜晚天空如魔法般出現的可愛寶可夢們，能近距離直觀的絕佳機會！
+            <div class="time-slot">
+                <div class="time-header">22:00 ｜ 🫂 【全家正式會合】</div>
+                <div class="time-content">
+                    全家人在 Lounge 26 Hotel, Busan 飯店大廳會合、放置行李。
+                </div>
             </div>
-        </div>
 
-        <div class="day-summary">
-            💡 <strong>旅行小語：</strong>中午大啖現撈海鮮，晚上享受專人代烤豬五花。當無人機在廣安里夜空中亮起時，記得拿出相機捕捉爸媽眼中閃爍的驚喜，光線自然直出，就是最無價的家族合影。
-        </div>
-    </div>
-
-    <!-- Day 3 -->
-    <div class="day-header">📅 Day 3：7/26 (日) | 煙燻部隊鍋與海雲台高空奢華水療</div>
-    <div class="day-card">
-        <div class="weather-card">
-            <div class="weather-info">
-                <span class="weather-status">🌧️ 午後雷雨</span>
-                <span class="weather-temp">25°C - 31°C (77°F - 88°F)</span>
-                <span>💧 降雨機率：50%</span>
+            <div class="time-slot">
+                <div class="time-header">22:15 ｜ 🍗 【深夜消夜】</div>
+                <div class="time-content">
+                    飯店附近外帶 <strong>橋村炸雞</strong> 與 <strong>東大門獵奇辣年糕</strong> 回房間享用。
+                    <div class="spot-desc"><strong>【橋村炸雞】：</strong>主打經典不敗的蜂蜜蒜味酥脆外皮。</div>
+                    <div class="spot-desc"><strong>【東大門獵奇辣年糕】：</strong>全韓市佔第一、鋪滿厚實拉絲起司的大份量香辣年糕，外帶回房配著港灣夜景吃最過癮！</div>
+                </div>
             </div>
-            <div><span>☀️ 紫外線指數：9 (極高)</span></div>
-        </div>
 
-        <div class="time-slot">
-            <div class="time-header">08:30 ｜ 🥣 【彈性早餐】</div>
-            <div class="time-content">
-                南浦洞經典早餐群（同 Day 2，換吃不同家）。
+            <div class="day-summary">
+                💡 <strong>旅行小語：</strong> 第一天下午先享受兩人的寧靜海景，晚上在大廳迎接爸媽。當他們卸下行李，在房間裡一邊看著璀璨的釜山港大橋夜景、一邊吃著熱騰騰的炸雞，這份驚喜就是孝親之旅最完美的開場。
             </div>
         </div>
+    </details>
 
-        <div class="time-slot">
-            <div class="time-header">10:30 ｜ 🏬 【世界之最】 新世界百貨 Centum City 店</div>
-            <div class="time-content">
-                <strong>📍 景點解說：</strong>金氏世界紀錄認證的「全球最大百貨公司」。全室內冷氣、無障礙空間極度完善，聚集了世界頂級精品與潮流文創品牌，是夏日長輩最舒適的避暑逛街聖地。(百貨6樓買JellyCat)
+    <!-- Day 2 (Collapsible) -->
+    <details class="day-wrapper" open>
+        <summary class="day-header">
+            <span>📅 Day 2：7/25 (六) | 傳統現撈海鮮與璀璨無人機秀</span>
+        </summary>
+        <div class="day-card">
+            <div class="weather-card">
+                <div class="weather-info">
+                    <span class="weather-status">🌩️ 局部雷雨</span>
+                    <span class="weather-temp">26°C - 32°C (78°F - 89°F)</span>
+                    <span>💧 降雨機率：33%</span>
+                </div>
+                <div><span>☀️ 紫外線指數：9 (極高)</span></div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">08:30 ｜ 🥣 【彈性早餐】</div>
+                <div class="time-content">
+                    視胃口挑選南浦洞經典早餐。
+                    <div class="tip-box">📍 餐廳選擇：Egg Drop（爆漿厚蛋吐司）、新昌吐司（傳統鐵板古早味）、本粥（溫潤高檔松露鮑魚粥）、密陽血腸豬肉湯飯（釜山靈魂大骨白湯）、南浦雪濃湯（清爽純白牛骨湯）。</div>
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">10:30 ｜ 🛍️ 【輕鬆避暑】</div>
+                <div class="time-content">
+                    飯店對面 <strong>樂天百貨光復店</strong> ＋ <strong>樂天超市</strong>，或於 <strong>BIFF 廣場</strong> 隨意逛街吃小吃/國際市場紅豆剉冰。
+                    <div class="spot-desc"><strong>【樂天百貨光復店】：</strong>五樓買 JellyCat，Aqua Mall 5 樓 ARTBOX / Lotte Hi-Mart 尋找 ABKO 鍵盤手靠墊。</div>
+                    <div class="spot-desc"><strong>【樂天超市】：</strong>採買海苔、零食伴手禮，出示悠遊卡可享免稅店相關優惠券，另外 KKday 滿 12 萬韓元可折 1 萬韓元！</div>
+                    <div class="spot-desc"><strong>【BIFF 廣場】：</strong>釜山電影節發源地，一字排開的傳統攤販以現炸「元祖黑糖堅果糖餅」最出名，周邊有 31 冰淇淋 BIFF 廣場店。</div>
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">11:45 ｜ 🦀 【豪華午餐】 札嘎其海鮮市場（爸媽指名必吃！）</div>
+                <div class="time-content">
+                    <strong>📍 景點解說：</strong>韓國規模最大的指標性海鮮大樓。一樓室內大廳乾淨平坦、毫無傳統市場的腥臭與黏膩，兩旁整齊排列著現撈的活跳跳章魚、頂級肥美鮑魚、現切生魚片以及各式鮮甜貝類；挑選完後直接送往二樓由店家代客料理，不論是鮮甜的清蒸鮑魚，還是現煮的澎湃海鮮湯，都能一次滿足爸媽想大啖豐富海味的願望。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">14:00 ｜ 👟 【商圈血拼】</div>
+                <div class="time-content">
+                    南浦洞光復路時裝街 & 富平罐頭市場 大採買。號稱釜山的明洞。這裡平坦好逛，各大運動品牌旗艦店林立血拼聖地。
+                    <div class="tip-box">💡 購物與點心提示：光復路上有 31 冰淇淋釜山光復店、ARTBOX 光復 1/2 號店、南浦文庫；下午肚子餓強烈推薦去吃南浦洞起司天花板「李在牟披薩」與富平罐頭市場內的排隊名店「Milgot (밀곳)」（主打黃豆粉紅豆奶油艾草糯米糕）。</div>
+                    <div class="spot-desc">
+                        <strong>📍 釜山 Ready Young 藥局資訊（釜山首家）：</strong><br>
+                        地址：釜山廣域市中區BIFF廣場路40 B棟1、2樓 (부산광역시 중구 비프광장로 40)<br>
+                        營業時間：每日 10:00 - 23:00<br>
+                        特色服務：駐店專業藥師諮詢、中文/英文/日文翻譯、專業肌膚檢測儀、現場退稅 (Tax Free) 及 WOWPASS 付款。
+                    </div>
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">
+                    17:30 ｜ 🥩 【晚餐】 石岩烤肉
+                    <span class="badge-reservation">Naver Map 已訂位</span>
+                </div>
+                <div class="time-content">
+                    <strong>📍 餐廳介紹：</strong>南浦洞 4.8分神級熟成五花肉名店。主打特製的「傾斜黑石板」導流豬油，店員全程專業代烤，將肉質烤至表面金黃酥脆，搭配獨家『蘋果發酵泡菜』酸甜解膩，層次感十足。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">19:00 ｜ 🚕 【移動】</div>
+                <div class="time-content">
+                    搭計程車前往廣安里海水浴場。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">20:00 (或 22:00) ｜ ✨ 【視覺饗宴】 廣安里 寶可夢悠閒海邊假期 無人機燈光秀（週六限定）</div>
+                <div class="time-content">
+                    <strong>📍 景點解說：</strong>炎熱的夏夜，將絢麗點綴廣安里海灘的奇幻天空舞台，以寶可夢主題填滿的「廣安里 M 無人機燈光秀」即將舉行！夜晚天空如魔法般出現的可愛寶可夢們，能近距離直觀的絕佳機會！沙灘正對面馬路有 31 冰淇淋廣安里店。
+                </div>
+            </div>
+
+            <div class="day-summary">
+                💡 <strong>旅行小語：</strong>中午大啖現撈海鮮，晚上享受專人代烤豬五花。當無人機在廣安里夜空中亮起時，記得拿出相機捕捉爸媽眼中閃爍的驚喜，光線自然直出，就是最無價的家族合影。
             </div>
         </div>
+    </details>
 
-        <div class="time-slot">
-            <div class="time-header">11:30 ｜ 🥘 【午餐與甜點】 JVL 部隊鍋 ＆ Gelati Gelati 義式冰淇淋</div>
-            <div class="time-content">
-                <strong>📍 餐廳介紹：</strong>【JVL 部隊鍋】位於購物中心 4 樓，採用美國知名 Johnsonville 煙燻香腸與熱狗，湯頭濃郁香醇且有舒適獨立座位；吃飽後直奔【Gelati Gelati】，必點他們家濃郁濃醇、帶有微Ｑ米粒嚼勁的招牌「大米 (Riso) 口味」義式 Gelato。
+    <!-- Day 3 (Collapsible) -->
+    <details class="day-wrapper" open>
+        <summary class="day-header">
+            <span>📅 Day 3：7/26 (日) | 煙燻部隊鍋與海雲台高空奢華水療</span>
+        </summary>
+        <div class="day-card">
+            <div class="weather-card">
+                <div class="weather-info">
+                    <span class="weather-status">🌧️ 午後雷雨</span>
+                    <span class="weather-temp">25°C - 31°C (77°F - 88°F)</span>
+                    <span>💧 降雨機率：50%</span>
+                </div>
+                <div><span>☀️ 紫外線指數：9 (極高)</span></div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">08:30 ｜ 🥣 【彈性早餐】</div>
+                <div class="time-content">
+                    南浦洞經典早餐群（同 Day 2，換吃不同家）。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">10:30 ｜ 🏬 【世界之最】 新世界百貨 Centum City 店</div>
+                <div class="time-content">
+                    <strong>📍 景點解說：</strong>金氏世界紀錄認證的「全球最大百貨公司」。全室內冷氣、無障礙空間極度完善，聚集了世界頂級精品與潮流文創品牌，是夏日長輩最舒適的避暑逛街聖地。(百貨 6 樓買 JellyCat；B2 地下街有 31 冰淇淋門市)
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">11:30 ｜ 🥘 【午餐與甜點】 JVL 部隊鍋 ＆ Gelati Gelati 義式冰淇淋</div>
+                <div class="time-content">
+                    <strong>📍 餐廳介紹：</strong>【JVL 部隊鍋】位於購物中心 4 樓，採用美國知名 Johnsonville 煙燻香腸與熱狗，湯頭濃郁香醇且有舒適獨立座位；吃飽後直奔【Gelati Gelati】，必點他們家濃郁濃醇、帶有微Ｑ米粒嚼勁的招牌「大米 (Riso) 口味」義式 Gelato。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">14:00 ｜ 🥐 【移動與點心】</div>
+                <div class="time-content">
+                    搭乘計程車前往海雲台，購買知名鹽麵包當作小點心。 (海雲台主幹道上有店面超大的 31 冰淇淋海雲台店)
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">14:30 ｜ 💦 【極致放鬆】 ClubD Oasis 水上樂園 ＆ 汗蒸幕</div>
+                <div class="time-content">
+                    <strong>📍 景點解說：</strong>坐落於海雲台 LCT 摩天大樓內的頂級水療中心。包含高空無邊際海景泳池、人造浪（水上樂園需換泳衣），以及擁有五大主題的高級汗蒸幕與露天足浴區，長輩可以在這裡一邊欣賞海景一邊舒服地躺平睡午覺。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">
+                    18:00 ｜ 🥩 【晚餐】 味贊王鹽烤肉 海雲台店（步行約 1 公里）
+                    <span class="badge-reservation">Naver Map 已訂位</span>
+                </div>
+                <div class="time-content">
+                    <strong>📍 餐廳介紹：</strong>釜山無人不知的超人氣排隊烤肉天花板。主打超厚切 3.5 公分熟成豬五花，店員用測溫槍精準掌控火候，烤得外酥內多汁，搭配特製蝦醬與醃菜，香氣四溢。
+                </div>
+            </div>
+
+            <div class="day-summary">
+                💡 <strong>旅行小語：</strong> 上午享受頂級百貨的奢華冷氣，下午轉換節奏到海雲台。爸媽累了隨時能在高空汗蒸幕躺平小憩，看著窗外海天一色的景致，洗去所有疲憊，晚上再用鹽烤肉補滿體力！
             </div>
         </div>
+    </details>
 
-        <div class="time-slot">
-            <div class="time-header">14:00 ｜ 🥐 【移動與點心】</div>
-            <div class="time-content">
-                搭乘計程車前往海雲台，購買知名鹽麵包當作小點心。
+    <!-- Day 4 (Collapsible) -->
+    <details class="day-wrapper" open>
+        <summary class="day-header">
+            <span>📅 Day 4：7/27 (一) | 🎂 爸爸生日快樂！豪邁蟹肉與澎湃烤腸海鮮餐酒館</span>
+        </summary>
+        <div class="day-card">
+            <div class="weather-card">
+                <div class="weather-info">
+                    <span class="weather-status">🌦️ 零星雷雨</span>
+                    <span class="weather-temp">26°C - 31°C (78°F - 88°F)</span>
+                    <span>💧 降雨機率：40%</span>
+                </div>
+                <div><span>☀️ 紫外線指數：9 (極高)</span></div>
+            </div>
+
+            <div class="notice-banner">⚠️ 提醒：樂天超市南浦洞店本日公休</div>
+
+            <div class="time-slot">
+                <div class="time-header">08:30 ｜ 🥣 【彈性早餐】</div>
+                <div class="time-content">
+                    南浦洞經典早餐群。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">10:30 ｜ 🦀 【霸氣生日午餐】 機張市場松葉蟹</div>
+                <div class="time-content">
+                    <strong>📍 景點解說：</strong>釜山近郊歷史悠久的傳統水產市場，以價格實惠、產地現撈現蒸的巨大活體松葉蟹遠近馳名。大啖飽滿肥美的鮮甜蟹肉後，最後必吃用濃郁蟹膏炒製的精華蟹膏炒飯，大氣又滿足！
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">12:00 ｜ 🛍️ 【血拼戰場】 樂天 Premium Outlets 東釜山店</div>
+                <div class="time-content">
+                    <strong>📍 景點解說：</strong>以希臘聖托里尼度假風情打造的巨型 Outlet 城，佔地極廣、風景優美，是採買國際折扣精品、戶外機能服飾與運動服裝的絕佳掃貨去處。 (抵達後先帶護照至 1 樓服務中心領免費折扣手冊；1 樓另有 31 冰淇淋門市)
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">18:30 ｜ 🚕 【中場休息】</div>
+                <div class="time-content">
+                    先搭計程車將戰利品拿回飯店放置，洗把臉休息一下、保留長輩體力。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">
+                    19:00 ｜ 🍻 【慶生晚餐】 味酒工房 (미술공방)
+                    <span class="badge-reservation">Naver Map 已訂位</span>
+                </div>
+                <div class="time-content">
+                    <strong>📍 餐廳介紹：</strong>南浦洞人氣極高的海鮮熱炒餐酒館。主打「起司烤鮮扇貝、肥美大蝦、特製調味烤腸」三合一火烤拼盤，店員全程桌邊代烤，滋滋作響的石板配上拉絲起司，視覺效果極度浮誇震撼。
+                </div>
+            </div>
+
+            <div class="day-summary">
+                💡 <strong>旅行小語：</strong> 今天是整趟旅程的重頭戲——爸爸的生日！白天用霸氣的現撈松葉蟹拉開序幕，晚上在熱鬧的餐酒館看著起司扇貝與烤腸在石板上跳舞。全家人一起舉杯微醺，這絕對是視覺與味覺雙重高潮、永生難忘的生日夜。
             </div>
         </div>
+    </details>
 
-        <div class="time-slot">
-            <div class="time-header">14:30 ｜ 💦 【極致放鬆】 ClubD Oasis 水上樂園 ＆ 汗蒸幕</div>
-            <div class="time-content">
-                <strong>📍 景點解說：</strong>坐落於海雲台 LCT 摩天大樓內的頂級水療中心。包含高空無邊際海景泳池、人造浪（水上樂園需換泳衣），以及擁有五大主題的高級汗蒸幕與露天足浴區，長輩可以在這裡一邊欣賞海景一邊舒服地躺平睡午覺。
+    <!-- Day 5 (Collapsible) -->
+    <details class="day-wrapper" open>
+        <summary class="day-header">
+            <span>📅 Day 5：7/28 (二) | 溫潤湯飯暖胃與溫馨送機</span>
+        </summary>
+        <div class="day-card">
+            <div class="weather-card">
+                <div class="weather-info">
+                    <span class="weather-status">🌦️ 零星雷雨</span>
+                    <span class="weather-temp">26°C - 32°C (78°F - 89°F)</span>
+                    <span>💧 降雨機率：40%</span>
+                </div>
+                <div><span>☀️ 紫外線指數：10 (極高)</span></div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">07:30 ｜ 🧳 【退房】</div>
+                <div class="time-content">
+                    Lounge 26 Hotel, Busan 飯店辦理退房、寄放行李。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">07:45 ｜ 🥣 【溫暖早餐】</div>
+                <div class="time-content">
+                    享用熱騰騰的本粥、雪濃湯或湯飯，為長輩暖胃。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">09:00 ｜ 🚕 【溫馨送機】</div>
+                <div class="time-content">
+                    幫爸媽拿好行李、確認護照，叫好計程車，送爸媽出發去金海機場。(爸媽 11:25 飛機回高雄, BX795)
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">09:30 ｜ 🛍️ 【兩人時光】</div>
+                <div class="time-content">
+                    前往 <strong>西面商圈</strong>。
+                    <div class="spot-desc"><strong>📍 景點解說：</strong>釜山最繁華的年輕重鎮與潮流發源地。擁有龐大的地下街與無數極具設計感的潮流服飾、新銳設計師品牌、文創選物店（如田浦咖啡街周邊），是回國前最後衝刺掃貨的聖地。</div>
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">
+                    12:00 ｜ 🥩 【雙人午餐】 老花園燒肉 (Old Mansion)
+                    <span class="badge-reservation">Naver Map 已訂位</span>
+                </div>
+                <div class="time-content">
+                    <strong>📍 餐廳介紹：</strong>隱身在西面田浦巷弄內的韓屋老宅風復古烤肉店。環境極具摩登工業風與文青感，主打精緻的高級熟成豬肉，搭配多樣精緻特調沾醬，風味細緻。
+                </div>
+            </div>
+
+            <div class="time-slot">
+                <div class="time-header">15:00 ｜ ✈️ 【滿載歸途】</div>
+                <div class="time-content">
+                    回 Lounge 26 Hotel, Busan 飯店拿行李，搭計程車前往機場。(17:55 飛機回福岡, BX144)
+                </div>
+            </div>
+
+            <div class="day-summary">
+                💡 <strong>旅行小語：</strong> 早上用一碗熱呼呼的牛骨湯，為爸媽的釜山孝親行畫下最溫潤完美的句點。目送爸媽帶著滿滿的戰利品與笑顏開心回台後，你們也能好好享受最後悠閒的西面兩人時光，心滿意足地飛回熟悉的福岡。
             </div>
         </div>
+    </details>
 
-        <div class="time-slot">
-            <div class="time-header">
-                18:00 ｜ 🥩 【晚餐】 味贊王鹽烤肉 海雲台店（步行約 1 公里）
-                <span class="badge-reservation">Naver Map 已訂位</span>
-            </div>
-            <div class="time-content">
-                <strong>📍 餐廳介紹：</strong>釜山無人不知的超人氣排隊烤肉天花板。主打超厚切 3.5 公分熟成豬五花，店員用測溫槍精準掌控火候，烤得外酥內多汁，搭配特製蝦醬與醃菜，香氣四溢。
-            </div>
+    <!-- Special Discounts & Shopping Info Section (At Bottom) -->
+    <div class="card">
+        <div class="section-title">🎁 專屬優惠券與掃貨指南</div>
+        
+        <!-- KKday 樂天超市優惠 -->
+        <div class="info-box">
+            <div class="info-box-title">🛒 KKday 樂天超市專屬折扣折價券</div>
+            <p style="font-size: 0.9rem;">
+                在樂天超市採買伴手禮時，單筆消費<strong>滿 12 萬韓元可現折 1 萬韓元</strong>折扣！<br>
+                <span style="color: var(--text-muted); font-size: 0.85rem;">⚠️ 注意事項：部分商品如酒類、香菸等不參與此優惠。</span>
+            </p>
         </div>
 
-        <div class="day-summary">
-            💡 <strong>旅行小語：</strong> 上午享受頂級百貨的奢華冷氣，下午轉換節奏到海雲台。爸媽累了隨時能在高空汗蒸幕躺平小憩，看著窗外海天一色的景致，洗去所有疲憊，晚上再用鹽烤肉補滿體力！
-        </div>
-    </div>
-
-    <!-- Day 4 -->
-    <div class="day-header">📅 Day 4：7/27 (一) | 🎂 爸爸生日快樂！豪邁蟹肉與澎湃烤腸海鮮餐酒館</div>
-    <div class="day-card">
-        <div class="weather-card">
-            <div class="weather-info">
-                <span class="weather-status">🌦️ 零星雷雨</span>
-                <span class="weather-temp">26°C - 31°C (78°F - 88°F)</span>
-                <span>💧 降雨機率：40%</span>
-            </div>
-            <div><span>☀️ 紫外線指數：9 (極高)</span></div>
+        <!-- Lotte Premium Outlets Dongbusan 優惠 -->
+        <div class="info-box">
+            <div class="info-box-title">🛍️ 樂天 Premium Outlets 東釜山店 (Dongbusan) 護照禮遇</div>
+            <p style="font-size: 0.9rem;">
+                抵達 Lotte Premium Outlets Dongbusan 商場後，請先攜帶護照前往 <strong>1 樓的顧客服務中心（Customer Center）</strong>，即可免費領取一本<strong>紙本折扣手冊</strong>！
+            </p>
         </div>
 
-        <div class="notice-banner">⚠️ 提醒：樂天超市南浦洞店本日公休</div>
-
-        <div class="time-slot">
-            <div class="time-header">08:30 ｜ 🥣 【彈性早餐】</div>
-            <div class="time-content">
-                南浦洞經典早餐群。
-            </div>
+        <!-- 悠遊卡樂天免稅店優惠 -->
+        <div class="info-box">
+            <div class="info-box-title">💳 玩購韓國 悠遊卡 (Debit卡/金融卡) 樂天免稅店專屬優惠 (~2026.09.14)</div>
+            <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 8px;">出示各類悠遊卡、本人護照與專屬優惠條碼至樂天免稅店市區店（釜山店）服務台即可領取：</p>
+            <ul style="padding-left: 18px; font-size: 0.9rem;">
+                <li><strong>Benefit 1. 免費升級 GOLD 黃金會員：</strong>享免稅價最高 ~15% 折扣優惠（可與折價券疊加折上折）。</li>
+                <li><strong>Benefit 2. 10,000 韓元 PRE LDF PAY：</strong>辦完黃金會員後充值至個人帳號，單筆消費滿 $50 美金即可抵用。</li>
+                <li><strong>Benefit 3. 來店禮 - 韓國人氣面膜：</strong>贈送 MEDIHEAL PURE CALMING MASK 舒緩面膜乙片（各店限領一次）。</li>
+                <li><strong>Benefit 4. 來店禮 - 樂天瑪特折價券：</strong>贈送樂天瑪特 5 千韓元折價券（一人一天限送一次）。</li>
+                <li><strong>樂天世界折價優惠：</strong>出示悠遊卡、護照與專屬碼享樂天世界各設施折價優惠（2026.3.1~2026.9.14）。</li>
+            </ul>
         </div>
 
-        <div class="time-slot">
-            <div class="time-header">10:30 ｜ 🦀 【霸氣生日午餐】 機張市場松葉蟹</div>
-            <div class="time-content">
-                <strong>📍 景點解說：</strong>釜山近郊歷史悠久的傳統水產市場，以價格實惠、產地現撈現蒸的巨大活體松葉蟹遠近馳名。大啖飽滿肥美的鮮甜蟹肉後，最後必吃用濃郁蟹膏炒製的精華蟹膏炒飯，大氣又滿足！
-            </div>
+        <!-- 韓國觀光公社優惠券 -->
+        <div class="info-box">
+            <div class="info-box-title">🇰🇷 韓國觀光公社 釜山地區專屬優惠券</div>
+            <p style="font-size: 0.9rem;">
+                前往觀光公社活動頁面獲取更多景點與店家折扣：<br>
+                🔗 <a href="https://zhifeiquhanguo.com/cht/region/1/my-applications/1?uuid=97a659a9-8718-4ed4-b8bc-828ef9b89fbf&name=%E9%87%9C%E5%B1%B1" target="_blank" rel="noopener noreferrer">點此開啟韓國觀光公社釜山專屬優惠券網頁</a>
+            </p>
         </div>
 
-        <div class="time-slot">
-            <div class="time-header">12:00 ｜ 🛍️ 【血拼戰場】 樂天 Premium Outlets 東釜山店</div>
-            <div class="time-content">
-                <strong>📍 景點解說：</strong>以希臘聖托里尼度假風情打造的巨型 Outlet 城，佔地極廣、風景優美，是採買國際折扣精品、戶外機能服飾與運動服裝的絕佳掃貨去處。
-            </div>
+        <!-- 31冰淇淋皮卡丘聯名據點 -->
+        <div class="info-box">
+            <div class="info-box-title">🍦 31 冰淇淋 (Baskin Robbins) 皮卡丘聯名掃貨據點</div>
+            <ul style="padding-left: 18px; font-size: 0.9rem;">
+                <li><strong>南浦洞（飯店周邊）：</strong>直奔 <strong>釜山光復店</strong>（光復路時裝街上）或 <strong>BIFF 廣場店</strong>，買完直接提回飯店。</li>
+                <li><strong>釜山車站：</strong>高鐵站 1 樓室內設有門市，第一天抵達時可順便進去搶購！</li>
+                <li><strong>樂天 Premium Outlets 東釜山店：</strong>Outlet 1 樓設有門市，庫存機率較高，Day 4 逛 Outlet 時非常順路。</li>
+                <li><strong>新世界百貨 Centum City 店：</strong>百貨 B2 地下街設有門市，地鐵出站進入百貨時可順道看。</li>
+                <li><strong>海雲台：</strong>出地鐵站步行前往海灘主幹道上的超大店面 <strong>海雲台店</strong>。</li>
+                <li><strong>廣安里：</strong>沙灘第一排馬路上的 <strong>廣安里店</strong>，可邊吃冰邊賞廣安大橋。</li>
+            </ul>
         </div>
 
-        <div class="time-slot">
-            <div class="time-header">18:30 ｜ 🚕 【中場休息】</div>
-            <div class="time-content">
-                先搭計程車將戰利品拿回飯店放置，洗把臉休息一下、保留長輩體力。
-            </div>
+        <!-- ABKO 鍵盤手靠墊購買據點 -->
+        <div class="info-box">
+            <div class="info-box-title">⌨️ ABKO 鍵盤手靠墊（南浦洞步行 10 分鐘內據點）</div>
+            <ul style="padding-left: 18px; font-size: 0.9rem;">
+                <li><strong>樂天百貨光復店（首選，店鋪最集中）：</strong>
+                    <ul>
+                        <li><strong>ARTBOX：</strong>位於 Aqua Mall 5 樓，常設 ABKO 等電競周邊專區。</li>
+                        <li><strong>Lotte Hi-Mart：</strong>館內大型電子賣場，鍵盤外設品項齊全且可直接現場退稅。</li>
+                    </ul>
+                </li>
+                <li><strong>光復路商圈（街邊獨立大店）：</strong>
+                    <ul>
+                        <li><strong>ARTBOX 釜山光復 1 號店：</strong>靠近 BIFF 廣場，上下兩層的數位配件區極大。</li>
+                        <li><strong>ARTBOX 釜山光復 2 號店：</strong>位於光復路主步行街上，逛街最順路。</li>
+                    </ul>
+                </li>
+                <li><strong>南浦文庫（複合式連鎖書店）：</strong>位於南浦洞主街上，內設生活數位雜貨館，有販售人體工學靠墊。</li>
+            </ul>
         </div>
 
-        <div class="time-slot">
-            <div class="time-header">
-                19:00 ｜ 🍻 【慶生晚餐】 味酒工房 (미술공방)
-                <span class="badge-reservation">Naver Map 已訂位</span>
-            </div>
-            <div class="time-content">
-                <strong>📍 餐廳介紹：</strong>南浦洞人氣極高的海鮮熱炒餐酒館。主打「起司烤鮮扇貝、肥美大蝦、特製調味烤腸」三合一火烤拼盤，店員全程桌邊代烤，滋滋作響的石板配上拉絲起司，視覺效果極度浮誇震撼。
-            </div>
-        </div>
-
-        <div class="day-summary">
-            💡 <strong>旅行小語：</strong> 今天是整趟旅程的重頭戲——爸爸的生日！白天用霸氣的現撈松葉蟹拉開序幕，晚上在熱鬧的餐酒館看著起司扇貝與烤腸在石板上跳舞。全家人一起舉杯微醺，這絕對是視覺與味覺雙重高潮、永生難忘的生日夜。
-        </div>
-    </div>
-
-    <!-- Day 5 -->
-    <div class="day-header">📅 Day 5：7/28 (二) | 溫潤湯飯暖胃與溫馨送機</div>
-    <div class="day-card">
-        <div class="weather-card">
-            <div class="weather-info">
-                <span class="weather-status">🌦️ 零星雷雨</span>
-                <span class="weather-temp">26°C - 32°C (78°F - 89°F)</span>
-                <span>💧 降雨機率：40%</span>
-            </div>
-            <div><span>☀️ 紫外線指數：10 (極高)</span></div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">07:30 ｜ 🧳 【退房】</div>
-            <div class="time-content">
-                Lounge 26 Hotel, Busan 飯店辦理退房、寄放行李。
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">07:45 ｜ 🥣 【溫暖早餐】</div>
-            <div class="time-content">
-                享用熱騰騰的本粥、雪濃湯或湯飯，為長輩暖胃。
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">09:00 ｜ 🚕 【溫馨送機】</div>
-            <div class="time-content">
-                幫爸媽拿好行李、確認護照，叫好計程車，送爸媽出發去金海機場。(爸媽 11:25 飛機回高雄, BX795)
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">09:30 ｜ 🛍️ 【兩人時光】</div>
-            <div class="time-content">
-                前往 <strong>西面商圈</strong>。
-                <div class="spot-desc"><strong>📍 景點解說：</strong>釜山最繁華的年輕重鎮與潮流發源地。擁有龐大的地下街與無數極具設計感的潮流服飾、新銳設計師品牌、文創選物店（如田浦咖啡街周邊），是回國前最後衝刺掃貨的聖地。</div>
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">
-                12:00 ｜ 🥩 【雙人午餐】 老花園燒肉 (Old Mansion)
-                <span class="badge-reservation">Naver Map 已訂位</span>
-            </div>
-            <div class="time-content">
-                <strong>📍 餐廳介紹：</strong>隱身在西面田浦巷弄內的韓屋老宅風復古烤肉店。環境極具摩登工業風與文青感，主打精緻的高級熟成豬肉，搭配多樣精緻特調沾醬，風味細緻。
-            </div>
-        </div>
-
-        <div class="time-slot">
-            <div class="time-header">15:00 ｜ ✈️ 【滿載歸途】</div>
-            <div class="time-content">
-                回 Lounge 26 Hotel, Busan 飯店拿行李，搭計程車前往機場。(17:55 飛機回福岡, BX144)
-            </div>
-        </div>
-
-        <div class="day-summary">
-            💡 <strong>旅行小語：</strong> 早上用一碗熱呼呼的牛骨湯，為爸媽的釜山孝親行畫下最溫潤完美的句點。目送爸媽帶著滿滿的戰利品與笑顏開心回台後，你們也能好好享受最後悠閒的西面兩人時光，心滿意足地飛回熟悉的福岡。
-        </div>
     </div>
 
 </div>
