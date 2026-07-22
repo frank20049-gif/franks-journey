@@ -3,102 +3,1805 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>雙北必比登美食地圖 - Frank's Journey</title>
-    <link rel="stylesheet" href="../css/style.css">
+    <title>2026 臺灣米其林必比登推介 - 雙北美食進階地圖與踩點地圖</title>
+    <style>
+        :root {
+            --primary-color: #c8102e;
+            --secondary-color: #8b0000;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e9ecef;
+            --badge-new: #d9534f;
+            --badge-type: #4a69bd;
+            --accent-green: #27ae60;
+            --dish-tag-bg: #fff3cd;
+            --dish-tag-color: #856404;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px 0;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.05rem;
+            margin-bottom: 15px;
+        }
+
+        /* 控制列 */
+        .controls-bar {
+            background: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .progress-container {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .progress-label {
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar-bg {
+            height: 10px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: var(--accent-green);
+            transition: width 0.3s ease;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 6px 14px;
+            border: 1px solid var(--border-color);
+            background-color: #f1f3f5;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #e9ecef;
+        }
+
+        .btn.active {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        .btn-dice {
+            background-color: #ff9f43;
+            color: white;
+            border-color: #ff9f43;
+            font-weight: bold;
+        }
+
+        .btn-dice:hover {
+            background-color: #ee5253;
+            border-color: #ee5253;
+        }
+
+        .city-section {
+            margin-bottom: 40px;
+        }
+
+        .city-title {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            border-left: 5px solid var(--primary-color);
+            padding-left: 10px;
+            margin-bottom: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            padding: 18px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.1);
+        }
+
+        .card.completed {
+            background-color: #f8fcf9;
+            border-color: #c3e6cb;
+        }
+
+        .card.completed .shop-name {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .card.highlight {
+            animation: pulse 1s infinite alternate;
+            border: 2px solid #ff9f43 !important;
+            box-shadow: 0 0 15px rgba(255, 159, 67, 0.6) !important;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.03); }
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-wrapper {
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--accent-green);
+        }
+
+        .header-main {
+            flex: 1;
+        }
+
+        .shop-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .shop-name {
+            font-size: 1.15rem;
+            font-weight: bold;
+            color: #111;
+            line-height: 1.3;
+        }
+
+        .badges {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            font-size: 0.72rem;
+            padding: 2px 7px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .badge-type {
+            background-color: var(--badge-type);
+        }
+
+        .badge-new {
+            background-color: var(--badge-new);
+        }
+
+        .info-group {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #666;
+            margin-right: 4px;
+        }
+
+        .info-content {
+            color: #444;
+        }
+
+        /* 招牌菜區塊 */
+        .dish-box {
+            background-color: #fff9db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid #f1c40f;
+            font-size: 0.88rem;
+        }
+
+        .dish-title {
+            font-weight: bold;
+            color: #d35400;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .note-box {
+            background-color: #f1f3f5;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 0.82rem;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        .note-title {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        /* 快閃彈窗 */
+        .modal-overlay {
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #fff;
+            border-radius: 12px;
+            max-width: 450px;
+            width: 100%;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .modal-shop {
+            font-size: 1.6rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .modal-dish {
+            background: #fff9db;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-weight: bold;
+            color: #d35400;
+        }
+
+        .modal-close {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            h1 { font-size: 1.5rem; }
+            .controls-bar { flex-direction: column; align-items: stretch; }
+            .grid-container { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header -->
+
+<div class="container">
     <header>
-        <div class="container">
-            <div class="header-content">
-                <h1>🍽️ 雙北必比登美食地圖</h1>
-                <p>米其林美食推介踩點之旅 | 2024年6月-7月</p>
-                <a href="../index.html" class="back-link">← 回首頁</a>
-            </div>
-        </div>
+        <h1>2026 臺灣米其林必比登推介指南</h1>
+        <p class="subtitle">臺北市與新北市入選店家踩點地圖（招牌菜色＋老饕備忘錄）</p>
     </header>
 
-    <!-- Main Content -->
-    <main>
-        <div class="container">
-            <!-- Hero Image -->
-            <img src="https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1200&h=400&fit=crop" alt="台北美食" class="trip-hero">
-
-            <!-- Trip Info -->
-            <div class="trip-info">
-                <div class="info-item">
-                    <div class="info-label">旅遊日期</div>
-                    <div class="info-value">2024年6月-7月</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">地點</div>
-                    <div class="info-value">台北 & 新北</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">人數</div>
-                    <div class="info-value">2-3人</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">主題</div>
-                    <div class="info-value">美食探索</div>
-                </div>
+    <!-- 進度條與創意按鈕列 -->
+    <div class="controls-bar">
+        <div class="progress-container">
+            <div class="progress-label">
+                <span>解鎖進度</span>
+                <span id="progress-text">0 / 52 (0%)</span>
             </div>
-
-            <!-- Trip Content -->
-            <div class="trip-content">
-                <h2>行程概述</h2>
-                <p>這次的旅程主要聚焦於探索米其林必比登推介的餐廳，從傳統的在地小吃到創新的現代餐點，體驗台北與新北最多元的飲食文化。</p>
-
-                <h3>🌟 必訪景點與餐廳</h3>
-                <ul>
-                    <li><strong>天母蔥油雞</strong> - 台北市士林區，必比登推介的經典小吃，香氣逼人的蔥油雞令人難以忘懷</li>
-                    <li><strong>欣葉台菜</strong> - 新北市，傳統台菜料理，擁有超過40年的歷史，必點紅蟳米糕</li>
-                    <li><strong>林東芳牛肉麵</strong> - 台北市中山區，世界聞名的牛肉麵餐廳，湯頭濃郁深邃</li>
-                    <li><strong>度小月擔仔麵</strong> - 台北市中正區，1895年開業的老字號，創始人馬可仁先生的傳世經典</li>
-                    <li><strong>金春發牛肉麵</strong> - 新北市，麵條彈牙有勁，牛肉軟嫩入味</li>
-                </ul>
-
-                <h3>💡 旅遊心得</h3>
-                <p>台北與新北的美食文化相當豐富多元，必比登推介的餐廳雖然多為小館子，但每間都有其獨特的特色和故事。從早年的米粉湯到現在的創意料理，都能看見台灣人對美食的執著。建議按圖索驥，慢慢品嚐，每一家都值得駐足。</p>
-
-                <h3>📸 精彩回憶</h3>
-                <div class="gallery">
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&h=200&fit=crop" alt="美食照片1">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=200&fit=crop" alt="美食照片2">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1543632106-c8ab36dbfad0?w=300&h=200&fit=crop" alt="美食照片3">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561d1b?w=300&h=200&fit=crop" alt="美食照片4">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1504674900967-8e2a1d1c4cf3?w=300&h=200&fit=crop" alt="美食照片5">
-                    </div>
-                    <div class="gallery-item">
-                        <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300&h=200&fit=crop" alt="美食照片6">
-                    </div>
-                </div>
-
-                <h3>🗺️ 實用建議</h3>
-                <ul>
-                    <li>建議使用 Google Maps 事先規劃路線，以便充分利用時間</li>
-                    <li>許多餐廳人氣很旺，建議避開用餐尖峰時段（下午2-5點較清閒）</li>
-                    <li>部分老字號餐廳只接受現金，需事先準備足夠現金</li>
-                    <li>夏季天氣炎熱，請做好防曬和補水工作</li>
-                </ul>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
             </div>
         </div>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 Frank's Journey. All rights reserved. | 🌏 探索世界，記錄美好</p>
+        <div class="action-buttons">
+            <button class="btn btn-dice" onclick="rollDice()">🎲 今日吃什麼？(隨機抽卡)</button>
+            <button class="btn active" onclick="filterCards('all', this)">全部</button>
+            <button class="btn" onclick="filterCards('uncompleted', this)">未完成</button>
+            <button class="btn" onclick="filterCards('completed', this)">已解鎖</button>
         </div>
-    </footer>
+    </div>
+
+    <!-- 臺北市 -->
+    <section class="city-section">
+        <h2 class="city-title">📍 臺北市 (34 家)</h2>
+        <div class="grid-container">
+
+            <div class="card" data-id="tp-1">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">雞家莊（長春路）</span>
+                                <div class="badges"><span class="badge badge-type">台菜/中式</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8D%80%E9%95%B7%E6%98%A5%E8%B7%AF%2055%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市中山區長春路 55 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>三味雞（白斬雞/烏骨雞/燻雞）、雞家豆腐、雞飯</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>餐後隨附的免費古早味雞蛋布丁是靈魂！
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運中山站 3 號出口，步行約 8 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-2">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">小酌之家</span>
+                                <div class="badges"><span class="badge badge-type">海鮮/台菜</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8D%80%E5%90%89%E6%9E%97%E8%B7%AF%20407%20%E5%B7%B7%2026%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市中山區吉林路 407 巷 26 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>鮑魚烏骨雞湯、高麗菜干燉豬腳、蒜香中卷</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>招牌雞湯需提早預訂，湯頭鮮甜醇厚極入味。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運中山國小站 4 號出口，步行約 7 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-3">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">隱食家（雙城街）</span>
+                                <div class="badges"><span class="badge badge-type">台菜/私房菜</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8D%80%E9%9B%99%E5%9F%8E%E8%A1%97%2028%20%E5%B7%B7%208%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市中山區雙城街 28 巷 8 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>台式炒台南意麵、香煎豬肝、台菜海鮮手工菜</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>私房家常菜精緻化，豬肝火候控制得極為嫩口。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運中山國小站 1 號出口，步行約 6 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-4">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">人和園</span>
+                                <div class="badges"><span class="badge badge-type">滇菜/中式</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8D%80%E4%B8%AD%E5%B1%B1%E5%8C%97%E8%B7%AF%E4%BA%8C%E6%AE%B5%20112%20%E8%99%9F%202%20%E6%A8%93" target="_blank" rel="noopener noreferrer">臺北市中山區中山北路二段 112 號 2 樓</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>雞油雙菇、豌豆雞絲、破酥包、豇豆釀百頁</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>手工極為繁複的雲南名菜，豌豆仁顆顆純手工剝取。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運民權西路站 4 號出口，步行約 4 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-5">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">黃記魯肉飯</span>
+                                <div class="badges"><span class="badge badge-type">台灣小吃</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8D%80%E4%B8%AD%E5%B1%B1%E5%8C%97%E8%B7%AF%E4%BA%8C%E6%AE%B5%20183%20%E5%B7%B7%2028%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市中山區中山北路二段 183 巷 28 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>魯肉飯、蹄膀肉、滷白菜、羹湯</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>滷汁帶有膠質甜香，搭配蹄膀肉入口即化。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運中山國小站 1 號出口，步行約 6 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-6">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">有有1969</span>
+                                <div class="badges"><span class="badge badge-new">NEW</span><span class="badge badge-type">台菜/中式</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E5%B1%B1%E5%8D%80%E9%81%BC%E5%AF%A7%E8%A1%97%20116%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市中山區遼寧街 116 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>台式特色炒菜、經典手路合菜</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>新入選亮點！保留古早味台菜風味並融入現代裝潢質感。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運南京復興站 2 號出口，步行約 3 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-7">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">杭州小籠湯包</span>
+                                <div class="badges"><span class="badge badge-type">點心/麵食</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大安區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E6%9D%AD%E5%B7%9E%E5%8D%97%E8%B7%AF%E4%BA%8C%E6%AE%B5%2019%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大安區杭州南路二段 19 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>小籠湯包、角瓜蝦仁湯包、蔥油餅、豆沙鍋餅</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>平價鼎泰豐之稱，皮薄汁多，角瓜湯包極其清爽。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運東門站 3 號出口，步行約 8 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-8">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">小小樹食（大安路）</span>
+                                <div class="badges"><span class="badge badge-type">創意蔬食</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大安區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E5%A4%A7%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5%20116%20%E5%B7%B7%2017%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大安區大安路一段 116 巷 17 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>紅龍果粉紅醬燉飯、佛陀碗 (Buddha Bowl)、韓式脆妮</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>打破傳統素食印象，連葷食者都會驚艷的美式蔬食料理。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運忠孝復興站 3 號出口，步行約 4 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-9">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">軟食力</span>
+                                <div class="badges"><span class="badge badge-type">傳統早午點心</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大安區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E5%98%89%E8%88%88%E8%A1%97%20216%20%E5%B7%B7%2012%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大安區嘉興街 216 巷 12 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>軟皮粉漿蛋餅（五香豬排/九層塔）、地瓜球、饅頭夾蛋</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>傳統南部古早味粉漿蛋餅外酥內軟，沾醬味道一絕。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運六張犁站，步行約 5 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-10">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">Tableau by Craig Yang</span>
+                                <div class="badges"><span class="badge badge-type">法式/西式料理</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大安區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E5%AE%89%E5%92%8C%E8%B7%AF%E4%B8%80%E6%AE%B5%2078%20%E5%B7%B7%2033%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大安區安和路一段 78 巷 33 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>季節法式套餐、法式手工法棍與特製醬汁</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>精緻的法式餐館，必比登名單中罕見的西式細緻風采。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運信義安和站 1 號出口，步行約 4 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-11">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">巷子龍家常菜</span>
+                                <div class="badges"><span class="badge badge-type">江浙/中式菜</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大安區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E5%9B%9B%E7%B6%AD%E8%B7%AF%2025%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大安區四維路 25 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>無骨湖南排骨、東坡肉、湖南炒飯</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>原談話頭餐館，湖南與江浙家常菜色道道下飯。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運大安站 4 號出口，步行約 8 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-12">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">天下三絕</span>
+                                <div class="badges"><span class="badge badge-type">麵食/牛肉麵</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大安區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E4%BB%81%E6%84%9B%E8%B7%AF%E5%9B%9B%E6%AE%B5%2027%20%E5%B7%B7%203%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大安區仁愛路四段 27 巷 3 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>天下三絕牛肉麵（牛肉/牛腱/牛筋/牛尾）、滷味拼盤</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>牛肉麵界精品，湯頭使用多種番茄與洋蔥熬煮，搭配紅酒極搭！
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運忠孝復興站 3 號出口，步行約 5 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-13">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">鼎泰豐（信義路）</span>
+                                <div class="badges"><span class="badge badge-type">點心/中式麵食</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大安區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E4%BF%A1%E7%BE%A9%E8%B7%AF%E4%BA%8C%E6%AE%B5%20194%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大安區信義路二段 194 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>黃金十八折小籠包、排骨蛋炒飯、酸辣湯、松露小籠包</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>經典傳奇本店，排骨蛋炒飯被譽為被小籠包耽誤的炒飯天花板。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運東門站 5 號出口，步行約 1 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-14">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">雄記蔥抓餅</span>
+                                <div class="badges"><span class="badge badge-type">街頭小吃</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大安區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E7%BE%85%E6%96%AF%E7%A6%8F%E8%B7%AF%E5%9B%9B%E6%AE%B5%20108%20%E5%B7%B7%202%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大安區羅斯福路四段 108 巷 2 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>招牌蔥抓餅加蛋加起司、獨門蜂蜜芥末醬/辣椒醬</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>公館夜市排隊名店，餅皮外酥內軟，一定要加特製九層塔與醬料。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運公館站 1 號出口，步行約 3 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-15">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">胖塔可 (Pàng)</span>
+                                <div class="badges"><span class="badge badge-type">墨西哥異國料理</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大安區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%AE%89%E5%8D%80%E6%96%87%E6%98%8C%E8%A1%97%20181%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大安區文昌街 181 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>Birria 燉牛肉塔可、手作玉米餅皮 Taco</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>沾著香濃牛肉燉汁一起吃的傳統 Birria Taco 是靈魂焦點。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運信義安和站 3 號出口，步行約 3 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-16">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">青嬌</span>
+                                <div class="badges"><span class="badge badge-new">NEW</span><span class="badge badge-type">川菜/特色中式</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中正區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E6%AD%A3%E5%8D%80%E6%BF%9F%E5%8D%97%E8%B7%AF%E4%BA%8C%E6%AE%B5%209%20%E8%99%9F%201%20%E6%A8%93" target="_blank" rel="noopener noreferrer">臺北市中正區濟南路二段 9 號 1 樓</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>青花椒特色川菜、香辣手路菜</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>2026 最新入選！主打青花椒的鮮麻風味，菜色精緻清爽不油膩。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運忠孝新生站 5 號出口，步行約 4 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-17">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">雙月食品（青島東路）</span>
+                                <div class="badges"><span class="badge badge-type">燉湯/台式小吃</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中正區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E6%AD%A3%E5%8D%80%E9%9D%92%E5%B3%B6%E6%9D%B1%E8%B7%AF%206-2%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市中正區青島東路 6-2 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>蛤蜊燉雞湯、愛恨椒芝麵、吹風滷味、高麗菜虱目魚湯</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>湯品料滿到溢出來，溫補首選，滷味使用中藥熬煮極入味。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運善導寺站 2 號出口，步行約 3 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-18">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">祥和蔬食（中正）</span>
+                                <div class="badges"><span class="badge badge-type">川味蔬食</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中正區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E6%AD%A3%E5%8D%80%E9%8E%AE%E6%B1%9F%E8%A1%97%201%20%E5%B7%B7%201%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市中正區鎮江街 1 巷 1 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>塔香素客家小炒、宮保素雞丁、清蒸臭豆腐</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>全台首家獲必比登推介的川味素食餐廳，炒勁爆香十足！
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運善導寺站 2 號出口，步行約 3 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-19">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">無名推車燒餅</span>
+                                <div class="badges"><span class="badge badge-type">夜市小吃/點心</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中正區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%B8%AD%E6%AD%A3%E5%8D%80%E4%B8%AD%E8%8F%AF%E8%B7%AF%E4%BA%8C%E6%AE%B5%20315%20%E5%B7%B7%EF%BC%88%E5%8D%97%E6%A9%9F%E5%A0%B4%E5%A4%9C%E5%B8%82%EF%BC%89" target="_blank" rel="noopener noreferrer">臺北市中正區中華路二段 315 巷（南機場夜市）</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>長燒餅、蔥肉餅、紅豆餅、甜酥餅</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>南機場夜市排隊攤位，炭火現烤，價格超實惠的銅板美食。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運小南門站 3 號出口，步行約 13 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-20">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">心潮飯店</span>
+                                <div class="badges"><span class="badge badge-type">新派台菜/炒飯</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">信義區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%BF%A1%E7%BE%A9%E5%8D%80%E5%BF%A0%E5%AD%9D%E6%9D%B1%E8%B7%AF%E4%BA%94%E6%AE%B5%2068%20%E8%99%9F%202%20%E6%A8%93%EF%BC%88%E5%BE%AE%E9%A2%A8%E4%BF%A1%E7%BE%A9%EF%BC%89" target="_blank" rel="noopener noreferrer">臺北市信義區忠孝東路五段 68 號 2 樓（微風信義）</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>厚炸排骨炒飯、烏魚子蝦仁炒飯、特調台味調酒</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>時髦復古風潮台菜館，將台式炒飯發揮得極具儀式感。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運市政府站 3 號出口直達。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-21">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">開囍</span>
+                                <div class="badges"><span class="badge badge-new">NEW</span><span class="badge badge-type">中式合菜</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">信義區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E4%BF%A1%E7%BE%A9%E5%8D%80%E8%8E%8A%E6%95%AC%E8%B7%AF%20441%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市信義區莊敬路 441 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>中式精緻手路菜、功夫熱炒</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>2026 新登場！結合經典中式合菜與現代視覺呈現。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運台北101/世貿站 3 號出口，步行約 10 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-22">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">雲川水月</span>
+                                <div class="badges"><span class="badge badge-type">當代蔬食/印籍料理</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">松山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E6%9D%BE%E5%B1%B1%E5%8D%80%E5%AF%8C%E9%8C%A6%E8%A1%97%20120%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市松山區富錦街 120 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>印度香料創意蔬食、富錦街風格蔬食套餐</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>位於民生社區富錦街，環境充滿禪意與異國美學。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運松山機場站 3 號出口，步行約 12 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-23">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">金賞軒</span>
+                                <div class="badges"><span class="badge badge-type">台菜/私房料理</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">松山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E6%9D%BE%E5%B1%B1%E5%8D%80%E6%95%A6%E5%8C%96%E5%8C%97%E8%B7%AF%20155%20%E5%B7%B7%20111%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市松山區敦化北路 155 巷 111 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>佐料香煎豬肝、蒜苗炒生蚵、金沙蝦球</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>主廚底子極紮實，將常見台菜小炒處理得極具精緻質感。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運台北小巨蛋站 1 號出口，步行約 7 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-24">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">醉楓園小館</span>
+                                <div class="badges"><span class="badge badge-type">粵菜/中式合菜</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">松山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E6%9D%BE%E5%B1%B1%E5%8D%80%E5%85%AB%E5%BE%B7%E8%B7%AF%E4%B8%89%E6%AE%B5%208%20%E5%B7%B7%205%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市松山區八德路三段 8 巷 5 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>芋泥香酥鴨、當紅炸子雞、瓊山豆腐</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>老字號老牌粵菜，芋泥香酥鴨外酥內軟、芋香濃郁必點！
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運台北小巨蛋站 2 號出口，步行約 6 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-25">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">武田咖哩</span>
+                                <div class="badges"><span class="badge badge-new">NEW</span><span class="badge badge-type">日式咖哩</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">松山區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E6%9D%BE%E5%B1%B1%E5%8D%80%E4%B8%89%E6%B0%91%E8%B7%AF%20146%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市松山區三民路 146 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>熟成日式香料咖哩、手作炸豬排咖哩</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>2026 最新入選！醬汁濃郁熟成多日，香氣層次豐富。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運南京三民站 1 號出口，步行約 10 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-26">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">老山東牛肉家常麵店</span>
+                                <div class="badges"><span class="badge badge-type">牛肉麵/麵食</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">萬華區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E8%90%AC%E8%8F%AF%E5%8D%80%E8%A5%BF%E5%AF%A7%E5%8D%97%E8%B7%AF%2070%20%E8%99%9F%20B1" target="_blank" rel="noopener noreferrer">臺北市萬華區西寧南路 70 號 B1</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>紅燒牛肉家常麵、牛肉水餃、各式手工小菜</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>位於西門町萬年大樓 B1，手打家常寬麵條Q彈有勁。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運西門站 6 號出口，步行約 5 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-27">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">蘇來傳</span>
+                                <div class="badges"><span class="badge badge-type">傳統點心/小吃</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">萬華區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E8%90%AC%E8%8F%AF%E5%8D%80%E5%92%8C%E5%B9%B3%E8%A5%BF%E8%B7%AF%E4%B8%89%E6%AE%B5%20176%20%E5%B7%B7%204%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市萬華區和平西路三段 176 巷 4 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>台式傳統糕餅、麻糬、古早味點心</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>萬華在地老字號點心傳承，傳統糕餅軟Q不黏牙。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運龍山寺站 2 號出口，步行約 3 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-28">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">小王煮瓜</span>
+                                <div class="badges"><span class="badge badge-type">台灣小吃/黑金魯肉飯</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">萬華區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E8%90%AC%E8%8F%AF%E5%8D%80%E8%8F%AF%E8%A5%BF%E8%A1%97%2017-4%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市萬華區華西街 17-4 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>黑金魯肉飯、清湯瓜仔肉、控肉飯</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>華西街夜市必吃，黑金魯肉飯色澤黑亮卻香醇不油膩。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運龍山寺站 1 號出口，步行約 6 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-29">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">大橋頭老牌筒仔米糕</span>
+                                <div class="badges"><span class="badge badge-type">傳統小吃</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大同區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%90%8C%E5%8D%80%E5%BB%B6%E5%B9%B3%E5%8C%97%E8%B7%AF%E4%B8%89%E6%AE%B5%2041%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大同區延平北路三段 41 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>筒仔米糕（肥肉/瘦肉）、豬血湯、蘿蔔排骨湯</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>延三夜市地標，淋上獨門甜辣醬與香辣醬混合雙醬極美味。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運大橋頭站 1 號出口，步行約 3 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-30">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">HUGH dessert dining</span>
+                                <div class="badges"><span class="badge badge-type">西式盤飾甜點</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大同區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%90%8C%E5%8D%80%E9%87%8D%E6%85%B6%E5%8C%97%E8%B7%AF%E4%B8%89%E6%AE%B5%20136%20%E5%B7%B7%2056%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大同區重慶北路三段 136 巷 56 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>季節限定法式盤飾甜點套餐 (Dessert Course)</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>採全預約制，將甜點做成高級西餐套餐模式呈現。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運大橋頭站 3 號出口，步行約 8 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-31">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">賣麵炎仔</span>
+                                <div class="badges"><span class="badge badge-type">傳統切仔麵/小吃</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">大同區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A4%A7%E5%90%8C%E5%8D%80%E5%AE%89%E8%A5%BF%E8%A1%97%20106%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市大同區安西街 106 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>紅燒肉（招牌必點）、切仔麵、白斬雞、豬肝</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>大稻埕百年老店，紅燒肉外酥內嫩，被公認台北前三強！
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運大橋頭站 1 號出口，步行約 7 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-32">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">鍾家原上海生煎包</span>
+                                <div class="badges"><span class="badge badge-type">夜市小吃/點心</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">士林區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A3%AB%E6%9E%97%E5%8D%80%E5%B0%8F%E6%9D%B1%E8%B7%AF%2038%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市士林區小東路 38 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>鮮肉生煎包、高麗菜生煎包</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>士林夜市排隊指標，底部煎得金黃酥脆，內餡鮮美爆汁。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運劍潭站 1 號出口，步行約 6 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-33">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">番紅花印度美饌</span>
+                                <div class="badges"><span class="badge badge-type">印度料理</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">士林區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A3%AB%E6%9E%97%E5%8D%80%E5%A4%A9%E6%AF%8D%E6%9D%B1%E8%B7%AF%2038%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市士林區天母東路 38 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>傳統烤餅 (Naan)、香料咖哩雞、坦都里烤雞</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>天母經典異國名店，香料層次細緻豐富，烤餅香氣十足。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">搭乘公車至「三玉宮站」或「天母棒球場站」。</span></div>
+            </div>
+
+            <div class="card" data-id="tp-34">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">松竹園</span>
+                                <div class="badges"><span class="badge badge-type">山產/台菜合菜</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">士林區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E8%87%BA%E5%8C%97%E5%B8%82%E5%A3%AB%E6%9E%97%E5%8D%80%E6%B0%B8%E5%85%AC%E8%B7%AF%20546%20%E8%99%9F" target="_blank" rel="noopener noreferrer">臺北市士林區永公路 546 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>黃金土雞、香酥竹筍捲、手工小籠包/小饅頭</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>陽明山土雞城首選，自家飼養土雞肉質Q彈緊實！
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運劍潭站轉乘公車 303 至「松竹園站」。</span></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 新北市 -->
+    <section class="city-section">
+        <h2 class="city-title">📍 新北市 (18 家)</h2>
+        <div class="grid-container">
+
+            <div class="card" data-id="ntp-1">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">阿爸の芋圓</span>
+                                <div class="badges"><span class="badge badge-type">甜點/冰品小吃</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">永和區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%B0%B8%E5%92%8C%E5%8D%80%E4%BF%9D%E5%B9%B3%E8%B7%AF%2018%20%E5%B7%B7%201%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市永和區保平路 18 巷 1 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>招牌芋見泥蔗片冰（芋泥/芋圓/芋球/薏仁/珍珠）</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>樂華夜市指標甜品，碳燒蔗香蔗片冰搭配濃郁綿密芋泥超讚！
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運頂溪站 1 號出口，步行約 9 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-2">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">客家小館</span>
+                                <div class="badges"><span class="badge badge-type">客家菜/合菜</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">永和區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%B0%B8%E5%92%8C%E5%8D%80%E6%99%BA%E5%85%89%E8%A1%97%2022%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市永和區智光街 22 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>白菜燉雞湯、客家小炒、蔥烤醃篤鮮、盆菜盆小菜</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>環境如同咖啡廳般雅緻，白菜燉雞湯湯頭濃厚呈奶白色。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運秀朗橋站 1 號出口，步行約 10 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-3">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">宋朝</span>
+                                <div class="badges"><span class="badge badge-type">中式麵食/滷味</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">永和區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%B0%B8%E5%92%8C%E5%8D%80%E5%BE%A9%E8%88%88%E8%A1%97%2072%20%E8%99%9F%201%20%E6%A8%93" target="_blank" rel="noopener noreferrer">新北市永和區復興街 72 號 1 樓</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>特色乾拌麵、祕製滷味拼盤</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>巷弄內古風文青麵館，麵條勁道，滷味香氣入骨。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運頂溪站 1 號出口，步行約 3 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-4">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">永和佳香豆漿</span>
+                                <div class="badges"><span class="badge badge-type">傳統中式早點</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">永和區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%B0%B8%E5%92%8C%E5%8D%80%E6%B0%91%E6%B2%BB%E8%A1%97%2057%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市永和區民治街 57 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>鹹豆漿、現烤胡椒餅/燒餅油條、蛋餅</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>在地巷仔內宵夜早點首選，鹹豆漿加辣油極具風味。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運秀朗橋站 1 號出口，步行約 12 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-5">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">上好雞肉</span>
+                                <div class="badges"><span class="badge badge-type">台灣小吃/雞肉飯</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中和區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E4%B8%AD%E5%92%8C%E5%8D%80%E6%B0%91%E6%B2%BB%E8%A1%97%208%20%E5%B7%B7%201%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市中和區民治街 8 巷 1 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>雞肉飯、切盤白斬雞/煙燻雞、下水湯</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>雞肉皮Q肉嫩且帶有濃郁雞油香氣，搭配半熟蛋完美！
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運秀朗橋站，步行約 12 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-6">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">蔡家牛肉麵</span>
+                                <div class="badges"><span class="badge badge-type">麵食/牛肉麵</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">中和區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E4%B8%AD%E5%92%8C%E5%8D%80%E7%A7%80%E6%9C%97%E8%B7%AF%E4%B8%89%E6%AE%B5%20153%20%E5%B7%B7%2016%20%E5%BC%84%2012%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市中和區秀朗路三段 153 巷 16 弄 12 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>清燉牛肉麵、紅燒半筋半肉麵</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>湯頭清亮甘甜，牛肉塊大厚實，中和在地人口袋名單。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運秀朗橋站 1 號出口，步行約 6 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-7">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">北鴨鴨肉羹</span>
+                                <div class="badges"><span class="badge badge-new">NEW</span><span class="badge badge-type">台灣小吃</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">新店區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%96%B0%E5%BA%97%E5%8D%80%E5%85%89%E6%98%8E%E8%A1%97%20169%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市新店區光明街 169 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>招牌鴨肉羹麵/米粉、鴨肉飯</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>2026 最新入選！鋼管輸送鴨肉羹大賣點，湯頭蒜香與筍絲甘甜交織。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運新店區公所站 1 號出口，步行約 5 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-8">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">碧潭橋頭鵝肉</span>
+                                <div class="badges"><span class="badge badge-new">NEW</span><span class="badge badge-type">台灣小吃/切仔麵</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">新店區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%96%B0%E5%BA%97%E5%8D%80%E5%8C%97%E6%96%B0%E8%B7%AF%E4%B8%80%E6%AE%B5%20127%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市新店區北新路一段 127 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>切盤鮮鵝肉、鵝油湯麵/切仔麵</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>2026 最新入選！鵝肉多汁不柴，搭配獨門蘸醬是一絕。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運新店區公所站 1 號出口，步行約 3 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-9">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">賴岡山羊肉</span>
+                                <div class="badges"><span class="badge badge-type">台灣小吃/當歸羊肉</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">新店區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%96%B0%E5%BA%97%E5%8D%80%E4%B8%AD%E6%AD%A3%E8%B7%AF%20244-4%20%E8%99%9F%201%20%E6%A8%93" target="_blank" rel="noopener noreferrer">新北市新店區中正路 244-4 號 1 樓</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>帶皮羊肉湯、魯肉飯、乾意麵</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>當歸湯頭順口不苦澀，帶皮羊肉Q彈無羊騷味，深夜食堂極選。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運七張站 1 號出口，步行約 10 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-10">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">山東小館</span>
+                                <div class="badges"><span class="badge badge-type">北方麵點/中式合菜</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">新店區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%96%B0%E5%BA%97%E5%8D%80%E4%B8%AD%E5%A4%AE%E8%B7%AF%20133%20%E5%B7%B7%2019%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市新店區中央路 133 巷 19 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>酸菜白肉鍋、水餃、叢林雞、蔥油餅</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>新店聚餐熱點，酸菜白肉鍋湯底天然酸香，搭配手打水餃超滿足。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運小碧潭站 2 號出口，步行約 5 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-11">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">超人鱸魚</span>
+                                <div class="badges"><span class="badge badge-type">湯品/台灣小吃</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">新店區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%96%B0%E5%BA%97%E5%8D%80%E5%8C%97%E6%96%B0%E8%B7%AF%E4%B8%80%E6%AE%B5%20349%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市新店區北新路一段 349 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>枸杞鱸魚湯、柴燒魯肉飯、豬腳</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>無味精鮮美魚湯，無火藥味，湯頭清甜滿滿膠原蛋白。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運新店區公所站 1 號出口，步行約 2 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-12">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">店小二（大同北路）</span>
+                                <div class="badges"><span class="badge badge-type">台灣小吃/魯肉飯</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">三重區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E4%B8%89%E9%87%8D%E5%8D%80%E5%A4%A7%E5%90%8C%E5%8C%97%E8%B7%AF%2027%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市三重區大同北路 27 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>魯肉飯、蝦仁羹、蒜泥白肉</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>三重五大魯肉飯之一，帶皮切丁滷肉肥而不膩，甜鹹適中。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運菜寮站 3 號出口，步行約 8 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-13">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">光興腿庫</span>
+                                <div class="badges"><span class="badge badge-type">台灣小吃/便當</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">三重區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E4%B8%89%E9%87%8D%E5%8D%80%E5%85%89%E8%88%88%E8%A1%97%20223%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市三重區光興街 223 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>腿庫便當、豬腳便當、魯肉飯加香腸</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>三重排隊名店，腿庫滷得極透且軟嫩，淋上辣椒醬超級開胃！
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運菜寮站 2 號出口，步行約 6 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-14">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">大碗公當歸羊肉</span>
+                                <div class="badges"><span class="badge badge-type">台灣小吃/湯品</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">板橋區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%9D%BF%E6%A9%8B%E5%8D%80%E5%9B%9B%E7%B6%AD%E8%B7%AF%20112%20%E5%B7%B7%202%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市板橋區四維路 112 巷 2 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>帶皮羊肉湯、黑金魯肉飯、麻油麵線</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>當歸湯頭甘甜不燥，大塊帶皮羊肉沾特製豆瓣醬超滿足。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運新埔民生站/新埔站 1 號出口，步行約 8 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-15">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">葉家藥燉排骨</span>
+                                <div class="badges"><span class="badge badge-type">傳統小吃/藥膳</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">板橋區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%9D%BF%E6%A9%8B%E5%8D%80%E4%B8%AD%E5%B1%B1%E8%B7%AF%E4%BA%8C%E6%AE%B5%20441%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市板橋區中山路二段 441 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>藥燉排骨、藥燉肋排、肉燥麵線</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>中山路夜間人氣攤位，湯頭藥香濃郁回甘，肋排一啃即骨肉分離。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">搭乘公車 234、265、705 至「光復橋站」。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-16">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">珍品餐飲坊</span>
+                                <div class="badges"><span class="badge badge-type">台灣小吃/鴨肉羹</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">新莊區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E6%96%B0%E8%8E%8A%E5%8D%80%E5%BE%A9%E8%88%88%E8%B7%AF%E4%B8%80%E6%AE%B5%2097%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市新莊區復興路一段 97 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>生炒鴨肉羹、鴨肉飯、菜頭湯</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>新莊體育館對面，鴨肉帶有強烈大火爆炒的生炒焦香味。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">捷運新莊站 1 號出口，步行約 12 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-17">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">阿爸的客家菜</span>
+                                <div class="badges"><span class="badge badge-new">NEW</span><span class="badge badge-type">客家料理/合菜</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">三峽區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E4%B8%89%E5%B3%BD%E5%8D%80%E4%B8%AD%E5%B1%B1%E8%B7%AF%20118%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市三峽區中山路 118 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>經典客家小炒、薑絲大腸、梅干扣肉</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>2026 最新入選！三峽老街周邊聚餐首選，地道道地客家風味。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">自捷運永寧站轉公車至「三峽老街站」步行 7 分鐘。</span></div>
+            </div>
+
+            <div class="card" data-id="ntp-18">
+                <div>
+                    <div class="card-header">
+                        <label class="checkbox-wrapper"><input type="checkbox" onchange="toggleCard(this)"></label>
+                        <div class="header-main">
+                            <div class="shop-title-row">
+                                <span class="shop-name">三姐妹農家樂</span>
+                                <div class="badges"><span class="badge badge-type">台菜/農家無菜單</span></div>
+                            </div>
+                            <div class="info-group"><span class="info-label">區域：</span><span class="info-content">萬里區</span></div>
+                            <div class="info-group"><span class="info-label">地址：</span><span class="info-content"><a href="https://www.google.com/maps/search/?api=1&query=%E6%96%B0%E5%8C%97%E5%B8%82%E8%90%AC%E9%87%8C%E5%8D%80%E5%A4%A7%E5%9D%AA%2023%20%E8%99%9F" target="_blank" rel="noopener noreferrer">新北市萬里區大坪 23 號</a></span></div>
+                        </div>
+                    </div>
+                    <div class="dish-box">
+                        <div class="dish-title">🔥 招牌/必點菜色</div>
+                        <div>農家無菜單料理、白斬雞、季節山菜</div>
+                    </div>
+                    <div class="note-box">
+                        <span class="note-title">💡 老饕備忘錄：</span>隱身萬里山區，採無菜單模式，食材皆為自家種植或在地新鮮直送。
+                    </div>
+                </div>
+                <div class="info-group" style="margin-top:10px;"><span class="info-label">交通：</span><span class="info-content">位於萬里山區，建議自行開車前往。</span></div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<!-- 隨機抽卡彈窗 (Modal) -->
+<div class="modal-overlay" id="diceModal">
+    <div class="modal-content">
+        <div class="modal-title">🎲 命運的美食召喚！</div>
+        <div class="modal-shop" id="modalShopName">正在選店...</div>
+        <div class="modal-dish" id="modalDishName">招牌菜色搜尋中...</div>
+        <p id="modalNote" style="font-size:0.9rem; color:#666;">備忘錄讀取中...</p>
+        <button class="modal-close" onclick="closeModal()">就吃這家！</button>
+    </div>
+</div>
+
+<script>
+    let currentFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+        updateMapLinks();
+        loadState();
+        updateProgress();
+    });
+
+    function updateMapLinks() {
+        document.querySelectorAll('.card').forEach((card) => {
+            const shopName = card.querySelector('.shop-name')?.textContent?.trim();
+            const addressLink = card.querySelector('.info-group .info-content a');
+
+            if (!shopName || !addressLink) {
+                return;
+            }
+
+            const addressText = addressLink.textContent.trim();
+            const query = `${shopName} ${addressText}`;
+            const placePath = encodeURIComponent(shopName);
+            addressLink.href = `https://www.google.com/maps/place/${placePath}/?q=${encodeURIComponent(query)}`;
+        });
+    }
+
+    function toggleCard(checkbox) {
+        const card = checkbox.closest('.card');
+        const cardId = card.getAttribute('data-id');
+
+        if (checkbox.checked) {
+            card.classList.add('completed');
+        } else {
+            card.classList.remove('completed');
+        }
+
+        saveState(cardId, checkbox.checked);
+        updateProgress();
+        applyFilter();
+    }
+
+    function updateProgress() {
+        const totalCards = document.querySelectorAll('.card').length;
+        const completedCards = document.querySelectorAll('.card.completed').length;
+        const percentage = totalCards === 0 ? 0 : Math.round((completedCards / totalCards) * 100);
+
+        document.getElementById('progress-text').innerText = `${completedCards} / ${totalCards} (${percentage}%)`;
+        document.getElementById('progress-fill').style.width = `${percentage}%`;
+    }
+
+    function saveState(cardId, isChecked) {
+        let savedData = JSON.parse(localStorage.getItem('bib_gourmand_2026_check') || '{}');
+        savedData[cardId] = isChecked;
+        localStorage.setItem('bib_gourmand_2026_check', JSON.stringify(savedData));
+    }
+
+    function loadState() {
+        let savedData = JSON.parse(localStorage.getItem('bib_gourmand_2026_check') || '{}');
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            const cardId = card.getAttribute('data-id');
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            
+            if (savedData[cardId]) {
+                checkbox.checked = true;
+                card.classList.add('completed');
+            }
+        });
+    }
+
+    function filterCards(filter, btn) {
+        currentFilter = filter;
+        
+        document.querySelectorAll('.action-buttons .btn').forEach(b => {
+            if(!b.classList.contains('btn-dice')) b.classList.remove('active');
+        });
+        if(btn) btn.classList.add('active');
+
+        applyFilter();
+    }
+
+    function applyFilter() {
+        const cards = document.querySelectorAll('.card');
+
+        cards.forEach(card => {
+            const isCompleted = card.classList.contains('completed');
+
+            if (currentFilter === 'all') {
+                card.style.display = 'flex';
+            } else if (currentFilter === 'completed') {
+                card.style.display = isCompleted ? 'flex' : 'none';
+            } else if (currentFilter === 'uncompleted') {
+                card.style.display = !isCompleted ? 'flex' : 'none';
+            }
+        });
+    }
+
+    /* 🎲 創意功能：今日吃什麼（隨機抽卡） */
+    function rollDice() {
+        // 優先從「未完成」的列表中抽取
+        let availableCards = Array.from(document.querySelectorAll('.card:not(.completed)'));
+        
+        // 如果全破了，就從全部抽
+        if (availableCards.length === 0) {
+            availableCards = Array.from(document.querySelectorAll('.card'));
+        }
+
+        if (availableCards.length === 0) return;
+
+        // 移除先前的 highlight
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('highlight'));
+
+        const randomCard = availableCards[Math.floor(Math.random() * availableCards.length)];
+        const shopName = randomCard.querySelector('.shop-name').innerText;
+        const dishText = randomCard.querySelector('.dish-box div:nth-child(2)').innerText;
+        const noteText = randomCard.querySelector('.note-box').innerText;
+
+        // 彈出視窗
+        document.getElementById('modalShopName').innerText = shopName;
+        document.getElementById('modalDishName').innerText = '🔥 推薦必點：' + dishText;
+        document.getElementById('modalNote').innerText = noteText;
+        document.getElementById('diceModal').style.display = 'flex';
+
+        // 捲動並高亮該卡片
+        randomCard.classList.add('highlight');
+        randomCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function closeModal() {
+        document.getElementById('diceModal').style.display = 'none';
+    }
+</script>
+
 </body>
 </html>
